@@ -1,23 +1,23 @@
-import logo from './logo.svg';
 import './App.css';
+import React, { useState } from 'react';
+import Chessboard from './Chessboard';
+import PlayerTurn from './PlayerTurn';
+import SwitchTurnButton from './SwitchTurnButton';
+
 
 function App() {
+  const [currentPlayer, setCurrentPlayer] = useState('White');
+
+  const togglePlayerTurn = () => {
+    setCurrentPlayer(currentPlayer === 'White' ? 'Black' : 'White');
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>React Chess App</h1>
+      <PlayerTurn currentPlayer={currentPlayer} />
+      <Chessboard />
+      <SwitchTurnButton onClick={togglePlayerTurn} /> {/* Render the SwitchTurnButton component */}
     </div>
   );
 }

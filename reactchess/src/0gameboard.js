@@ -1,7 +1,27 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
+import '../src/css/chessboard.css';
 const Chessboard = () => {
+    const [boardState, setBoardState] = useState(initialBoardState);
+
+    const initialBoardState = [
+        ['WR', 'WP', '', '', '', '', 'BP', 'BR'],
+        ['WN', 'WP', '', '', '', '', 'BP', 'BN'],
+        ['WB', 'WP', '', '', '', '', 'BP', 'BB'],
+        ['WQ', 'WP', '', '', '', '', 'BP', 'BQ'],
+        ['WK', 'WP', '', '', '', '', 'BP', 'BK'],
+        ['WB', 'WP', '', '', '', '', 'BP', 'BB'],
+        ['WN', 'WP', '', '', '', '', 'BP', 'BN'],
+        ['WR', 'WP', '', '', '', '', 'BP', 'BR'],
+      ];
+
+      const movePawn = (fromRow, fromCol, toRow, toCol) => {
+        const newBoardState = [...boardState];
+        newBoardState[toRow][toCol] = newBoardState[fromRow][fromCol];
+        newBoardState[fromRow][fromCol] = '';
+        setBoardState(newBoardState);
+      };
+
     const board = [];
   
     for (let row = 0; row < 8; row++) {
@@ -19,14 +39,20 @@ const Chessboard = () => {
     }
   
     return (
-        <div className="container">
-          <div className="row justify-content-center">
-            <div className="col-md-6">
-              <div className="chessboard">
-                {board}
-              </div>
-            </div>
-          </div>
+        <div className="chessboard">
+          {board}
+          {boardState.map((row, rowIndex) => (
+            row.map((piece, colIndex) => (
+              piece && (
+                <Pawn
+                  key={`${rowIndex}-${colIndex}`}
+                  piece={piece}
+                  position={[rowIndex, colIndex]}
+                  movePawn={movePawn}
+                />
+              )
+            ))
+          ))}
         </div>
       );
     };
