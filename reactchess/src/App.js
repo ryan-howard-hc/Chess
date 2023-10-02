@@ -1,8 +1,8 @@
 import './App.css';
 import React, { useState } from 'react';
-import Chessboard from './Chessboard';
-import PlayerTurn from './PlayerTurn';
-import SwitchTurnButton from './SwitchTurnButton';
+import Chessboard from './0gameboard';
+import PlayerTurn from './07playerturns';
+import SwitchTurnButton from './07playerturns';
 
 
 function App() {

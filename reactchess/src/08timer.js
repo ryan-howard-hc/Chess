@@ -1,11 +1,11 @@
-import React from 'react';
+// import React from 'react';
 
-const SwitchTurnButton = ({ onClick }) => {
-  return (
-    <button onClick={onClick} className="switch-turn-button">
-      Switch Turn
-    </button>
-  );
-};
+// const SwitchTurnButton = ({ onClick }) => {
+//   return (
+//     <button onClick={onClick} className="switch-turn-button">
+//       Switch Turn
+//     </button>
+//   );
+// };
 
-export default SwitchTurnButton;
+// export default SwitchTurnButton;
