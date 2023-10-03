@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../src/css/chessboard.css';
-import Pawn from './01pawn';
+// import Pawn from './01pawn';
 
 const Chessboard = () => {
   const initialBoardState = [
-    ['R', 'P', '', '', '', '', 'p', 'r'],
-    ['N', 'P', '', '', '', '', 'p', 'n'],
-    ['B', 'P', '', '', '', '', 'p', 'b'],
-    ['Q', 'P', '', '', '', '', 'p', 'q'],
-    ['K', 'P', '', '', '', '', 'p', 'k'],
-    ['B', 'P', '', '', '', '', 'p', 'b'],
-    ['N', 'P', '', '', '', '', 'p', 'n'],
-    ['R', 'P', '', '', '', '', 'p', 'r'],
+    ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'],
+    ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
+    [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+    [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+    [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+    [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+    ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
+    ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'],
   ];
   const [boardState, setBoardState] = useState(initialBoardState);
 
@@ -21,6 +21,37 @@ const Chessboard = () => {
     newBoardState[toRow][toCol] = newBoardState[fromRow][fromCol];
     newBoardState[fromRow][fromCol] = '';
     setBoardState(newBoardState);
+  };
+
+  const isPawnMoveValid = (fromRow, fromCol, toRow, toCol, piece) => {
+    const direction = piece === 'P' ? 1 : -1;
+
+    // one square forward
+    if (fromCol === toCol && fromRow + direction === toRow && boardState[toRow][toCol] === ' ') {
+      return true;
+    }
+
+    // first move can be two
+    if (
+      fromCol === toCol &&
+      fromRow + direction * 2 === toRow &&
+      fromRow === (piece === 'P' ? 1 : 6) && // Starting position
+      boardState[toRow][toCol] === ' ' &&
+      boardState[fromRow + direction][toCol] === ' '
+    ) {
+      return true;
+    }
+
+    // captures diagonally
+    if (
+      Math.abs(fromCol - toCol) === 1 &&
+      fromRow + direction === toRow &&
+      boardState[toRow][toCol] !== ' '
+    ) {
+      return true;
+    }
+
+    return false;
   };
 
   const board = [];
@@ -37,23 +68,24 @@ const Chessboard = () => {
           className={`square ${squareColor}`}
           onClick={() => {
             if (piece !== '') {
-              // handle piece movement
-              // move any piece to an empty square
               const targetPiece = prompt('Enter the target square:');
               if (targetPiece) {
                 const targetCol = targetPiece.charCodeAt(0) - 97;
                 const targetRow = 8 - parseInt(targetPiece[1], 10);
-                movePiece(row, col, targetRow, targetCol);
+
+                if (isPawnMoveValid(row, col, targetRow, targetCol, piece)) {
+                  movePiece(row, col, targetRow, targetCol);
+                } else {
+                  alert('Invalid move for the pawn.');
+                }
               }
             }
           }}
         >
           {piece && (
-            <Pawn
-              piece={piece}
-              position={[row, col]}
-              movePiece={movePiece}
-            />
+            <div className="chess-piece">
+              {piece}
+            </div>
           )}
         </div>
       );
@@ -64,3 +96,6 @@ const Chessboard = () => {
 };
 
 export default Chessboard;
+
+
+
