@@ -44,36 +44,36 @@ const movePiece = (fromRow, fromCol, toRow, toCol) => {
 
 
 const isPawnMoveValid = (fromRow, fromCol, toRow, toCol, piece) => {
-    const direction = piece === 'P' ? 1 : -1;
-    const startingRow = piece === 'P' ? 1 : 6;
+  const direction = piece === 'P' ? 1 : -1;
+  const startingRow = piece === 'P' ? 1 : 6;
 
-    if (piece === 'p' || piece === 'P') {
-        console.log('Piece:', piece);
-        console.log('fromRow:', fromRow);
-        console.log('fromCol:', fromCol);
-        console.log('toRow:', toRow);
-        console.log('toCol:', toCol);
-        console.log('Source square:', boardState[fromRow][fromCol]);
-        console.log('Destination square:', boardState[toRow][toCol]);
+  if (piece === 'p' || piece === 'P') {
+    console.log('Piece:', piece);
+    console.log('fromRow:', fromRow);
+    console.log('fromCol:', fromCol);
+    console.log('toRow:', toRow);
+    console.log('toCol:', toCol);
+    console.log('Source square:', boardState[fromRow][fromCol]);
+    console.log('Destination square:', boardState[toRow][toCol]);
 
-        if (fromCol === toCol && (fromRow + direction === toRow || fromRow - direction === toRow) && boardState[toRow][toCol] === ' ' && boardState[fromRow][fromCol] === piece) {
-            console.log('Valid');
-            return true;
-        }
-
-        if (fromCol === toCol && fromRow + direction * 2 === toRow && fromRow === startingRow && boardState[toRow][toCol] === ' ' && boardState[fromRow + direction][toCol] === ' ') {
-            console.log('Valid move for first step!');
-            return true;
-        }
-
-        if (Math.abs(fromCol - toCol) === 1 && (fromRow + direction === toRow || fromRow - direction === toRow) && boardState[toRow][toCol] !== ' ') {
-            console.log('Valid capture');
-            return true;
-        }
+    if (fromCol === toCol && (fromRow + direction === toRow || fromRow - direction === toRow) && boardState[toRow][toCol] === ' ' && boardState[fromRow][fromCol] === piece) {
+      console.log('Valid');
+      return true;
     }
 
-    console.log('Invalid move');
-    return false;
+    if (fromCol === toCol && fromRow + direction * 2 === toRow && fromRow === startingRow && boardState[toRow][toCol] === ' ' && boardState[fromRow + direction][toCol] === ' ') {
+      console.log('Valid move for first step!');
+      return true;
+    }
+
+    if (Math.abs(fromCol - toCol) === 1 && (fromRow + direction === toRow || fromRow - direction === toRow) && boardState[toRow][toCol] !== ' ' && boardState[toRow][toCol] !== piece.toLowerCase()) {
+      console.log('Valid capture');
+      return true;
+    }
+  }
+
+  console.log('Invalid move');
+  return false;
 };
 
 const isRookMoveValid = (fromRow, fromCol, toRow, toCol, piece) => { 
