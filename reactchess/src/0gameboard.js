@@ -92,57 +92,36 @@ const Chessboard = () => {
     return false;
   };
 
-//   const board = [];
-
-//   for (let row = 0; row < 8; row++) {
-//     for (let col = 0; col < 8; col++) {
-//       const squareColor = (row + col) % 2 === 0 ? 'white' : 'black';
-//       const squareId = `${String.fromCharCode(97 + col)}${8 - row}`;
-//       const piece = boardState[row][col];
-
-//       board.push(
-//         <div
-//           key={squareId}
-//           className={`square ${squareColor}`}
-//           onClick={() => {
-//             if (selectedPiece === null) {
-//               setSelectedPiece({ row, col });
-//               console.log('Selected Piece:', boardState[row][col]);
-//             } else {
-//               const isValidMove = isPawnMoveValid(
-//                 selectedPiece.row,
-//                 selectedPiece.col,
-//                 row,
-//                 col,
-//                 boardState[selectedPiece.row][selectedPiece.col]
-//               );
-//               if (isValidMove) {
-//                 movePiece(selectedPiece.row, selectedPiece.col, row, col);
-//                 console.log('Piece moved successfully!');
-//               } else {
-//                 alert('Invalid move for the pawn.');
-//                 console.log('Invalid move for the pawn.');
-//               }
-//               setSelectedPiece(null);
-//             }
-//           }}
-//         >
-//           {piece && (
-//             <div className="chess-piece">
-//               {piece}
-//             </div>
-//           )}
-//         </div>
-//       );
-//     }
-//   }
-
-//   return <div className="chessboard">{board}</div>;
-// };
-
-// export default Chessboard;
-
-
+  const isRookMoveValid = (fromRow, fromCol, toRow, toCol, piece) => {
+    if (fromRow === toRow || fromCol === toCol) {
+      // if the rook is moving in a straight line
+      const rowStep = fromRow === toRow ? 0 : fromRow < toRow ? 1 : -1;
+      const colStep = fromCol === toCol ? 0 : fromCol < toCol ? 1 : -1;
+  
+      let currentRow = fromRow + rowStep;
+      let currentCol = fromCol + colStep;
+  
+      while (currentRow !== toRow || currentCol !== toCol) {
+        // if there are any pieces blocking the path
+        if (boardState[currentRow][currentCol] !== ' ') {
+          console.log('Invalid move, blocked by piece');
+          return false;
+        }
+  
+        currentRow += rowStep;
+        currentCol += colStep;
+      }
+  
+      // if the destination square is empty or has an opponent's piece
+      if (boardState[toRow][toCol] === ' ' || (piece === piece.toUpperCase() && boardState[toRow][toCol] === boardState[toRow][toCol].toLowerCase()) || (piece === piece.toLowerCase() && boardState[toRow][toCol] === boardState[toRow][toCol].toUpperCase())) {
+        console.log('Valid move for rook');
+        return true;
+      }
+    }
+  
+    console.log('Invalid move for rook');
+    return false;
+  };
 
 const board = [];
 
@@ -153,32 +132,46 @@ for (let row = 0; row < 8; row++) {
     const piece = boardState[row][col];
 
     board.push(
-      <div
-        key={squareId}
-        className={`square ${squareColor}`}
-        onClick={() => {
-          if (selectedPiece === null) {
-              setSelectedPiece({ row, col });
-              console.log('Selected Piece:', boardState[row][col]);
-          } else {
-            const isValidMove = isPawnMoveValid(
-              selectedPiece.row,
-              selectedPiece.col,
-              row,
-              col,
-              boardState[selectedPiece.row][selectedPiece.col]
-            );
-              if (isValidMove) {
-                movePiece(selectedPiece.row, selectedPiece.col, row, col);
-                console.log('Piece moved successfully');
-              } else {
-                alert('Invalid move for the pawn.');
-                console.log('Invalid move for the pawn.');
-              }
-              setSelectedPiece(null);
-            }
-        }}
-      >
+<div
+  key={squareId}
+  className={`square ${squareColor}`}
+  onClick={() => {
+    if (selectedPiece === null) {
+      setSelectedPiece({ row, col });
+      console.log('Selected Piece:', boardState[row][col]);
+    } else {
+      const piece = boardState[selectedPiece.row][selectedPiece.col];
+      let isValidMove = false;
+
+      if (piece === 'P' || piece === 'p') {
+        isValidMove = isPawnMoveValid(
+          selectedPiece.row,
+          selectedPiece.col,
+          row,
+          col,
+          piece
+        );
+      } else if (piece === 'R' || piece === 'r') {
+        isValidMove = isRookMoveValid(
+          selectedPiece.row,
+          selectedPiece.col,
+          row,
+          col,
+          piece
+        );
+      }
+
+      if (isValidMove) {
+        movePiece(selectedPiece.row, selectedPiece.col, row, col);
+        console.log('Piece moved successfully');
+      } else {
+        alert('Invalid move for the selected piece.');
+        console.log('Invalid move for the selected piece.');
+      }
+      setSelectedPiece(null);
+    }
+  }}
+>
         {piece && (
           <div className="chess-piece">
             {piece}
