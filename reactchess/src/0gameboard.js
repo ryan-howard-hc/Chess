@@ -25,34 +25,38 @@ const Chessboard = () => {
 
   const isPawnMoveValid = (fromRow, fromCol, toRow, toCol, piece) => {
     const direction = piece === 'P' ? 1 : -1;
-
-    // one square forward
-    if (fromCol === toCol && fromRow + direction === toRow && boardState[toRow][toCol] === ' ') {
-      return true;
+  
+    if (piece === 'p' || piece === 'P') {
+      // one square forward
+      if (fromCol === toCol && fromRow + direction === toRow && boardState[toRow][toCol] === ' ') {
+        return true;
+      }
+  
+      // first move can be two
+      if (
+        fromCol === toCol &&
+        fromRow + direction * 2 === toRow &&
+        fromRow === (piece === 'P' ? 1 : 6) && // Starting position
+        boardState[toRow][toCol] === ' ' &&
+        boardState[fromRow + direction][toCol] === ' '
+      ) {
+        return true;
+      }
+  
+      // captures diagonally
+      if (
+        Math.abs(fromCol - toCol) === 1 &&
+        fromRow + direction === toRow &&
+        boardState[toRow][toCol] !== ' '
+      ) {
+        return true;
+      }
     }
-
-    // first move can be two
-    if (
-      fromCol === toCol &&
-      fromRow + direction * 2 === toRow &&
-      fromRow === (piece === 'P' ? 1 : 6) && // Starting position
-      boardState[toRow][toCol] === ' ' &&
-      boardState[fromRow + direction][toCol] === ' '
-    ) {
-      return true;
-    }
-
-    // captures diagonally
-    if (
-      Math.abs(fromCol - toCol) === 1 &&
-      fromRow + direction === toRow &&
-      boardState[toRow][toCol] !== ' '
-    ) {
-      return true;
-    }
-
+  
     return false;
   };
+
+  
 
   const board = [];
 
