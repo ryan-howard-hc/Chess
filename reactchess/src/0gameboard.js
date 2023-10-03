@@ -15,6 +15,7 @@ const Chessboard = () => {
     ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'],
   ];
   const [boardState, setBoardState] = useState(initialBoardState);
+  const [selectedPiece, setSelectedPiece] = useState(null);
 
   const movePiece = (fromRow, fromCol, toRow, toCol) => {
     const newBoardState = [...boardState];
@@ -28,11 +29,15 @@ const Chessboard = () => {
   
     if (piece === 'p' || piece === 'P') {
       // one square forward
-      if (fromCol === toCol && fromRow + direction === toRow && boardState[toRow][toCol] === ' ') {
+      if (
+        fromCol === toCol &&
+        (fromRow + direction === toRow || fromRow - direction === toRow) && // Modified this line
+        boardState[toRow][toCol] === ' '
+      ) {
         return true;
       }
   
-      // first move can be two
+      // first move can be two squares forward
       if (
         fromCol === toCol &&
         fromRow + direction * 2 === toRow &&
@@ -46,7 +51,7 @@ const Chessboard = () => {
       // captures diagonally
       if (
         Math.abs(fromCol - toCol) === 1 &&
-        fromRow + direction === toRow &&
+        (fromRow + direction === toRow || fromRow - direction === toRow) && // Modified this line
         boardState[toRow][toCol] !== ' '
       ) {
         return true;
@@ -55,6 +60,7 @@ const Chessboard = () => {
   
     return false;
   };
+  
 
   
 
@@ -67,25 +73,23 @@ const Chessboard = () => {
       const piece = boardState[row][col];
 
       board.push(
-        <div
-          key={squareId}
-          className={`square ${squareColor}`}
-          onClick={() => {
-            if (piece !== '') {
-              const targetPiece = prompt('Enter the target square:');
-              if (targetPiece) {
-                const targetCol = targetPiece.charCodeAt(0) - 97;
-                const targetRow = 8 - parseInt(targetPiece[1], 10);
-
-                if (isPawnMoveValid(row, col, targetRow, targetCol, piece)) {
-                  movePiece(row, col, targetRow, targetCol);
-                } else {
-                  alert('Invalid move for the pawn.');
-                }
-              }
-            }
-          }}
-        >
+<div
+  key={squareId}
+  className={`square ${squareColor}`}
+  onClick={() => {
+    if (selectedPiece === null && piece !== '') {
+      setSelectedPiece({ row, col });
+    } else if (selectedPiece !== null) {
+      const isValidMove = isPawnMoveValid(selectedPiece.row, selectedPiece.col, row, col, boardState[selectedPiece.row][selectedPiece.col]);
+      if (isValidMove) {
+        movePiece(selectedPiece.row, selectedPiece.col, row, col);
+      } else {
+        alert('Invalid move for the pawn.');
+      }
+      setSelectedPiece(null);
+    }
+  }}
+>
           {piece && (
             <div className="chess-piece">
               {piece}
