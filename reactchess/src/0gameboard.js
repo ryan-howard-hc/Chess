@@ -3,8 +3,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '../src/css/chessboard.css';
 import PlayerTurn from './07playerturns';
 import ChessPiece from './01chesspiece';
-
+import EasyModeToggle from './02easymode';
 const Chessboard = () => {
+const [easyMode, setEasyMode] = useState(false);
+const [validMoves, setValidMoves] = useState([]);
 
 const initialBoardState = [
 
@@ -24,34 +26,40 @@ const [currentPlayer, setCurrentPlayer] = useState('White');
 const [boardState, setBoardState] = useState(initialBoardState);
 const [selectedPiece, setSelectedPiece] = useState(null);
 
+const toggleEasyMode = () => {
+  setEasyMode(!easyMode);
+};
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 const movePiece = (fromRow, fromCol, toRow, toCol) => {
-    if (fromRow === toRow && fromCol === toCol) {
-        return;
-    }
+  if (fromRow === toRow && fromCol === toCol) {
+    return;
+  }
 
-    const newBoardState = [...boardState];
-    const piece = newBoardState[fromRow][fromCol];
+  const newBoardState = [...boardState];
+  const piece = newBoardState[fromRow][fromCol];
 
-    console.log('Moving piece:', piece);
-    console.log('From:', fromRow, fromCol);
-    console.log('To:', toRow, toCol);
+  console.log('Moving piece:', piece);
+  console.log('From:', fromRow, fromCol);
+  console.log('To:', toRow, toCol);
 
-    if (newBoardState[toRow][toCol] !== ' ') {
-        console.log('Capturing piece at destination:', newBoardState[toRow][toCol]);
-        newBoardState[toRow][toCol] = ' ';
-    }
+  if (newBoardState[toRow][toCol] !== ' ') {
+    console.log('Capturing piece at destination:', newBoardState[toRow][toCol]);
+    newBoardState[toRow][toCol] = ' ';
+  }
 
-    newBoardState[toRow][toCol] = piece;
-    newBoardState[fromRow][fromCol] = ' ';
+  newBoardState[toRow][toCol] = piece;
+  newBoardState[fromRow][fromCol] = ' ';
 
-    console.log('Updated board state:', newBoardState);
+  console.log('Updated board state:', newBoardState);
 
-    setBoardState(newBoardState);
-    setCurrentPlayer(currentPlayer === 'White' ? 'Black' : 'White');
+  setBoardState(newBoardState);
+  setCurrentPlayer(currentPlayer === 'White' ? 'Black' : 'White');
 
+  // Clear valid moves and selected piece after the move
+  setSelectedPiece(null);
+  setValidMoves([]);
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -329,9 +337,8 @@ for (let row = 0; row < 8; row++) {
 
         board.push (
             <div key={squareId}
-                className={
-                    `square ${squareColor}`
-                }
+            className={`square ${squareColor} ${selectedPiece && validMoves.includes(`${row}-${col}`) ? 'highlighted' : ''}`}
+
                 onClick={
                     () => {
                         if (selectedPiece === null) {
@@ -364,7 +371,10 @@ for (let row = 0; row < 8; row++) {
                             }
                             setSelectedPiece(null);
                         }
+                        console.log('Valid moves:', validMoves);
+
                     }
+                    
             }>
                 {
                 piece && (
@@ -379,10 +389,17 @@ for (let row = 0; row < 8; row++) {
 
 return (
   <div>
-          <PlayerTurn currentPlayer={currentPlayer} /> {/* Render the PlayerTurn component */}
+    <PlayerTurn currentPlayer={currentPlayer} />
 
-<div div className = "chessboard-container" > <div className="chessboard">
-    {board} </div></div></div>);};
+    {/* Render the EasyModeToggle component */}
+    <EasyModeToggle easyMode={easyMode} toggleEasyMode={toggleEasyMode} />
 
+    <div className="chessboard-container">
+      <div className="chessboard">
+{board}      </div>
+    </div>
+  </div>
+);
+};
 
 export default Chessboard;
