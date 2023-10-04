@@ -13,9 +13,13 @@ const Chessboard = () => {
     ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
     ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'],
   ];
+
+
 const [boardState, setBoardState] = useState(initialBoardState);
 const [selectedPiece, setSelectedPiece] = useState(null);
 
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 const movePiece = (fromRow, fromCol, toRow, toCol) => {
     if (fromRow === toRow && fromCol === toCol) {
@@ -41,6 +45,9 @@ const movePiece = (fromRow, fromCol, toRow, toCol) => {
 
     setBoardState(newBoardState);
 };
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 
 const isPawnMoveValid = (fromRow, fromCol, toRow, toCol, piece) => {
@@ -76,6 +83,10 @@ const isPawnMoveValid = (fromRow, fromCol, toRow, toCol, piece) => {
   return false;
 };
 
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 const isRookMoveValid = (fromRow, fromCol, toRow, toCol, piece) => { 
   
   // if the rook is moving in a straight line
@@ -110,6 +121,10 @@ const isRookMoveValid = (fromRow, fromCol, toRow, toCol, piece) => {
 };
 
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
 const isKnightMoveValid = (fromRow, fromCol, toRow, toCol, piece) => {
   const dx = Math.abs(toCol - fromCol);
   const dy = Math.abs(toRow - fromRow);
@@ -134,6 +149,10 @@ const isKnightMoveValid = (fromRow, fromCol, toRow, toCol, piece) => {
 };
 
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
 const isBishopMoveValid = (fromRow, fromCol, toRow, toCol, piece) => {
   const dx = Math.abs(toCol - fromCol);
   const dy = Math.abs(toRow - fromRow);
@@ -146,7 +165,7 @@ const isBishopMoveValid = (fromRow, fromCol, toRow, toCol, piece) => {
     let currentCol = fromCol + colStep;
 
     while (currentRow !== toRow || currentCol !== toCol) {
-      // Check if there are any pieces blocking the path
+      // if there are any pieces blocking the path
       if (boardState[currentRow][currentCol] !== ' ') {
         console.log('Invalid move, blocked by piece');
         return false;
@@ -156,7 +175,7 @@ const isBishopMoveValid = (fromRow, fromCol, toRow, toCol, piece) => {
       currentCol += colStep;
     }
 
-    // Check if the destination square is empty or has an opponent's piece
+    // if the destination square is empty or has an opponent's piece
     if (
       boardState[toRow][toCol] === ' ' ||
       (piece === piece.toUpperCase() && boardState[toRow][toCol] === boardState[toRow][toCol].toLowerCase()) ||
@@ -171,6 +190,99 @@ const isBishopMoveValid = (fromRow, fromCol, toRow, toCol, piece) => {
   return false;
 };
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+const isQueenMoveValid = (fromRow, fromCol, toRow, toCol, piece) => {
+  const dx = Math.abs(toCol - fromCol);
+  const dy = Math.abs(toRow - fromRow);
+
+  // Queens can move diagonally or in a straight line
+  if (dx === dy || fromRow === toRow || fromCol === toCol) {
+    // if the path is clear for a straight line move
+    if (fromRow === toRow || fromCol === toCol) {
+      const rowStep = fromRow === toRow ? 0 : fromRow < toRow ? 1 : -1;
+      const colStep = fromCol === toCol ? 0 : fromCol < toCol ? 1 : -1;
+      let currentRow = fromRow + rowStep;
+      let currentCol = fromCol + colStep;
+
+      while (currentRow !== toRow || currentCol !== toCol) {
+        // if there are any pieces blocking the path
+        if (boardState[currentRow][currentCol] !== ' ') {
+          console.log('Invalid move, blocked by piece');
+          return false;
+        }
+
+        currentRow += rowStep;
+        currentCol += colStep;
+      }
+    }
+
+    // if the path is clear for a diagonal move
+    if (dx === dy) {
+      const rowStep = fromRow < toRow ? 1 : -1;
+      const colStep = fromCol < toCol ? 1 : -1;
+      let currentRow = fromRow + rowStep;
+      let currentCol = fromCol + colStep;
+
+      while (currentRow !== toRow || currentCol !== toCol) {
+        // if there are any pieces blocking the path
+        if (boardState[currentRow][currentCol] !== ' ') {
+          console.log('Invalid move, blocked by piece');
+          return false;
+        }
+
+        currentRow += rowStep;
+        currentCol += colStep;
+      }
+    }
+
+    // if the destination square is empty or has an opponent's piece
+    if (
+      boardState[toRow][toCol] === ' ' ||
+      (piece === piece.toUpperCase() && boardState[toRow][toCol] === boardState[toRow][toCol].toLowerCase()) ||
+      (piece === piece.toLowerCase() && boardState[toRow][toCol] === boardState[toRow][toCol].toUpperCase())
+    ) {
+      console.log('Valid move for queen');
+      return true;
+    }
+  }
+
+  console.log('Invalid move for queen');
+  return false;
+};
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+const isKingMoveValid = (fromRow, fromCol, toRow, toCol, piece) => {
+  const dx = Math.abs(toCol - fromCol);
+  const dy = Math.abs(toRow - fromRow);
+
+  // Kings can move one square in any direction
+  if (dx <= 1 && dy <= 1) {
+    // Check if the destination square is empty or has an opponent's piece
+    if (
+      boardState[toRow][toCol] === ' ' ||
+      (piece === piece.toUpperCase() && boardState[toRow][toCol] === boardState[toRow][toCol].toLowerCase()) ||
+      (piece === piece.toLowerCase() && boardState[toRow][toCol] === boardState[toRow][toCol].toUpperCase())
+    ) {
+      console.log('Valid move for king');
+      return true;
+    }
+  }
+
+  console.log('Invalid move for king');
+  return false;
+};
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
 const board = [];
 
@@ -184,43 +296,55 @@ for (let row = 0; row < 8; row++) {
         }`;
         const piece = boardState[row][col];
 
-        board.push (<div key={squareId}
-            className={
-                `square ${squareColor}`
-            }
-            onClick={
-                () => {
-                    if (selectedPiece === null) {
-                        setSelectedPiece({row, col});
-                        console.log('Selected Piece:', boardState[row][col]);
-                    } else {
-                        const piece = boardState[selectedPiece.row][selectedPiece.col];
-                        let isValidMove = false;
-
-                        if (piece === 'P' || piece === 'p') {
-                          isValidMove = isPawnMoveValid(selectedPiece.row, selectedPiece.col, row, col, piece);
-                        } else if (piece === 'R' || piece === 'r') {
-                          isValidMove = isRookMoveValid(selectedPiece.row, selectedPiece.col, row, col, piece);
-                        } else if (piece === 'N' || piece === 'n') {
-                          isValidMove = isKnightMoveValid(selectedPiece.row, selectedPiece.col, row, col, piece);
-                        } else if (piece === 'B' || piece === 'b') {
-                          isValidMove = isBishopMoveValid(selectedPiece.row, selectedPiece.col, row, col, piece);
-                        }
-
-                        if (isValidMove) {
-                            movePiece(selectedPiece.row, selectedPiece.col, row, col);
-                            console.log('Piece moved successfully');
-                        } else {
-                            alert('Invalid move for the selected piece.');
-                            console.log('Invalid move for the selected piece.');
-                        }
-                        setSelectedPiece(null);
-                    }
+        board.push (
+            <div key={squareId}
+                className={
+                    `square ${squareColor}`
                 }
-        }> {
-            piece && (<div className="chess-piece"> {piece} </div>)
-        } </div>);
+                onClick={
+                    () => {
+                        if (selectedPiece === null) {
+                            setSelectedPiece({row, col});
+                            console.log('Selected Piece:', boardState[row][col]);
+                        } else {
+                            const piece = boardState[selectedPiece.row][selectedPiece.col];
+                            let isValidMove = false;
+
+                            if (piece === 'P' || piece === 'p') {
+                                isValidMove = isPawnMoveValid(selectedPiece.row, selectedPiece.col, row, col, piece);
+                            } else if (piece === 'R' || piece === 'r') {
+                                isValidMove = isRookMoveValid(selectedPiece.row, selectedPiece.col, row, col, piece);
+                            } else if (piece === 'N' || piece === 'n') {
+                                isValidMove = isKnightMoveValid(selectedPiece.row, selectedPiece.col, row, col, piece);
+                            } else if (piece === 'B' || piece === 'b') {
+                                isValidMove = isBishopMoveValid(selectedPiece.row, selectedPiece.col, row, col, piece);
+                            } else if (piece === 'Q' || piece === 'q') {
+                                isValidMove = isQueenMoveValid(selectedPiece.row, selectedPiece.col, row, col, piece);
+                            } else if (piece === 'K' || piece === 'k') {
+                                isValidMove = isKingMoveValid(selectedPiece.row, selectedPiece.col, row, col, piece);
+                            }
+
+                            if (isValidMove) {
+                                movePiece(selectedPiece.row, selectedPiece.col, row, col);
+                                console.log('Piece moved successfully');
+                            } else {
+                                alert('Invalid move for the selected piece.');
+                                console.log('Invalid move for the selected piece.');
+                            }
+                            setSelectedPiece(null);
+                        }
+                    }
+            }>
+                {
+                piece && (
+                    <div className="chess-piece">
+                        {piece} </div>
+                )
+            } </div>
+        );
     }
 }
 
-return <div className="chessboard"> {board}</div>;};export default Chessboard;
+return <div className="chessboard">
+    {board}</div>;};export default Chessboard;
+
