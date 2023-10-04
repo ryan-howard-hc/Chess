@@ -1,24 +1,22 @@
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../src/css/chessboard.css';
-// import PlayerTurn from './07playerturns';
+import PlayerTurn from './07playerturns';
+
 const Chessboard = () => {
-  // const [currentPlayer, setCurrentPlayer] = useState('Player 1');
 
-  // const handleTurnChange = (newPlayer) => {
-  //   setCurrentPlayer(newPlayer);
-  // };
-  const initialBoardState = [
-    ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'],
-    ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
-    [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-    [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-    [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-    [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-    ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
-    ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'],
-  ];
+const initialBoardState = [
+  ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'],
+  ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
+  [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+  [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+  [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+  [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+  ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
+  ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'],
+];
 
+const [currentPlayer, setCurrentPlayer] = useState('White');
 
 const [boardState, setBoardState] = useState(initialBoardState);
 const [selectedPiece, setSelectedPiece] = useState(null);
@@ -49,15 +47,23 @@ const movePiece = (fromRow, fromCol, toRow, toCol) => {
     console.log('Updated board state:', newBoardState);
 
     setBoardState(newBoardState);
+    setCurrentPlayer(currentPlayer === 'White' ? 'Black' : 'White');
+
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
-const isPawnMoveValid = (fromRow, fromCol, toRow, toCol, piece) => {
-  const direction = piece === 'P' ? 1 : -1;
-  const startingRow = piece === 'P' ? 1 : 6;
+const isPawnMoveValid = (fromRow, fromCol, toRow, toCol, piece, currentPlayer) => {
+  const direction = currentPlayer === 'White' ? 1 : -1;
+  const startingRow = currentPlayer === 'White' ? 1 : 6;
+
+  if ((piece === 'p' && currentPlayer === 'Black') || (piece === 'P' && currentPlayer === 'White')) {
+    // Check if it's the correct player's turn
+    console.log('It is not the current player\'s turn.');
+    return false;
+  }
 
   if (piece === 'p' || piece === 'P') {
     console.log('Piece:', piece);
@@ -92,8 +98,13 @@ const isPawnMoveValid = (fromRow, fromCol, toRow, toCol, piece) => {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-const isRookMoveValid = (fromRow, fromCol, toRow, toCol, piece) => { 
+const isRookMoveValid = (fromRow, fromCol, toRow, toCol, piece, currentPlayer) => { 
   
+  if ((piece === 'r' && currentPlayer === 'Black') || (piece === 'R' && currentPlayer === 'White')) {
+    console.log('It is not the current player\'s turn.');
+    return false;
+  }
+
   // if the rook is moving in a straight line
     if (fromRow === toRow || fromCol === toCol) {
         const rowStep = fromRow === toRow ? 0 : fromRow < toRow ? 1 : -1;
@@ -130,10 +141,13 @@ const isRookMoveValid = (fromRow, fromCol, toRow, toCol, piece) => {
 
 
 
-const isKnightMoveValid = (fromRow, fromCol, toRow, toCol, piece) => {
+const isKnightMoveValid = (fromRow, fromCol, toRow, toCol, piece, currentPlayer) => {
   const dx = Math.abs(toCol - fromCol);
   const dy = Math.abs(toRow - fromRow);
-
+  if ((piece === 'n' && currentPlayer === 'Black') || (piece === 'N' && currentPlayer === 'White')) {
+    console.log('It is not the current player\'s turn.');
+    return false;
+  }
   // Knights move in an L-shape: 2 squares in one direction and 1 square in a perpendicular direction.
   if ((dx === 1 && dy === 2) || (dx === 2 && dy === 1)) {
 
@@ -158,10 +172,13 @@ const isKnightMoveValid = (fromRow, fromCol, toRow, toCol, piece) => {
 
 
 
-const isBishopMoveValid = (fromRow, fromCol, toRow, toCol, piece) => {
+const isBishopMoveValid = (fromRow, fromCol, toRow, toCol, piece, currentPlayer) => {
   const dx = Math.abs(toCol - fromCol);
   const dy = Math.abs(toRow - fromRow);
-
+  if ((piece === 'b' && currentPlayer === 'Black') || (piece === 'B' && currentPlayer === 'White')) {
+    console.log('It is not the current player\'s turn.');
+    return false;
+  }
   // Bishops move diagonally, so dx should equal dy for a valid move.
   if (dx === dy) {
     const rowStep = fromRow < toRow ? 1 : -1;
@@ -199,10 +216,13 @@ const isBishopMoveValid = (fromRow, fromCol, toRow, toCol, piece) => {
 
 
 
-const isQueenMoveValid = (fromRow, fromCol, toRow, toCol, piece) => {
+const isQueenMoveValid = (fromRow, fromCol, toRow, toCol, piece, currentPlayer) => {
   const dx = Math.abs(toCol - fromCol);
   const dy = Math.abs(toRow - fromRow);
-
+  if ((piece === 'q' && currentPlayer === 'Black') || (piece === 'Q' && currentPlayer === 'White')) {
+    console.log('It is not the current player\'s turn.');
+    return false;
+  }
   // Queen can move diagonally or in a straight line
   if (dx === dy || fromRow === toRow || fromCol === toCol) {
     // if the path is clear for a straight line move
@@ -263,10 +283,13 @@ const isQueenMoveValid = (fromRow, fromCol, toRow, toCol, piece) => {
 
 
 
-const isKingMoveValid = (fromRow, fromCol, toRow, toCol, piece) => {
+const isKingMoveValid = (fromRow, fromCol, toRow, toCol, piece, currentPlayer) => {
   const dx = Math.abs(toCol - fromCol);
   const dy = Math.abs(toRow - fromRow);
-
+  if ((piece === 'k' && currentPlayer === 'Black') || (piece === 'K' && currentPlayer === 'King')) {
+    console.log('It is not the current player\'s turn.');
+    return false;
+  }
   // King can move one square in any direction
   if (dx <= 1 && dy <= 1) {
     // if the destination square is empty or has an opponent's piece
@@ -316,17 +339,17 @@ for (let row = 0; row < 8; row++) {
                             let isValidMove = false;
 
                             if (piece === 'P' || piece === 'p') {
-                                isValidMove = isPawnMoveValid(selectedPiece.row, selectedPiece.col, row, col, piece);
+                                isValidMove = isPawnMoveValid(selectedPiece.row, selectedPiece.col, row, col, piece, currentPlayer);
                             } else if (piece === 'R' || piece === 'r') {
-                                isValidMove = isRookMoveValid(selectedPiece.row, selectedPiece.col, row, col, piece);
+                                isValidMove = isRookMoveValid(selectedPiece.row, selectedPiece.col, row, col, piece, currentPlayer);
                             } else if (piece === 'N' || piece === 'n') {
-                                isValidMove = isKnightMoveValid(selectedPiece.row, selectedPiece.col, row, col, piece);
+                                isValidMove = isKnightMoveValid(selectedPiece.row, selectedPiece.col, row, col, piece, currentPlayer);
                             } else if (piece === 'B' || piece === 'b') {
-                                isValidMove = isBishopMoveValid(selectedPiece.row, selectedPiece.col, row, col, piece);
+                                isValidMove = isBishopMoveValid(selectedPiece.row, selectedPiece.col, row, col, piece, currentPlayer);
                             } else if (piece === 'Q' || piece === 'q') {
-                                isValidMove = isQueenMoveValid(selectedPiece.row, selectedPiece.col, row, col, piece);
+                                isValidMove = isQueenMoveValid(selectedPiece.row, selectedPiece.col, row, col, piece, currentPlayer);
                             } else if (piece === 'K' || piece === 'k') {
-                                isValidMove = isKingMoveValid(selectedPiece.row, selectedPiece.col, row, col, piece);
+                                isValidMove = isKingMoveValid(selectedPiece.row, selectedPiece.col, row, col, piece, currentPlayer);
                             }
 
                             if (isValidMove) {
@@ -352,7 +375,8 @@ for (let row = 0; row < 8; row++) {
 
 return (
   <div>
-    {/* <PlayerTurn currentPlayer={currentPlayer} onTurnChange={handleTurnChange} /> */}
+          <PlayerTurn currentPlayer={currentPlayer} /> {/* Render the PlayerTurn component */}
+
     <div className="chessboard">{board}</div>
   </div>
 );
