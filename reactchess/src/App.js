@@ -2,7 +2,7 @@ import './App.css';
 import React, { useState } from 'react';
 import Chessboard from './0gameboard';
 import PlayerTurn from './07playerturns';
-import SwitchTurnButton from './07playerturns';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 function App() {
@@ -15,9 +15,7 @@ function App() {
   return (
     <div className="App">
       <h1>React Chess App</h1>
-      <PlayerTurn currentPlayer={currentPlayer} />
       <Chessboard />
-      <SwitchTurnButton onClick={togglePlayerTurn} /> {/* Render the SwitchTurnButton component */}
     </div>
   );
 }

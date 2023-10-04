@@ -2,18 +2,21 @@ import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../src/css/chessboard.css';
 import PlayerTurn from './07playerturns';
+import ChessPiece from './01chesspiece';
 
 const Chessboard = () => {
 
 const initialBoardState = [
-  ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'],
-  ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
-  [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-  [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-  [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-  [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-  ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
+
   ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'],
+  ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
+  [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+  [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+  [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+  [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+  ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
+  ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'],
+
 ];
 
 const [currentPlayer, setCurrentPlayer] = useState('White');
@@ -59,7 +62,7 @@ const isPawnMoveValid = (fromRow, fromCol, toRow, toCol, piece, currentPlayer) =
   const direction = currentPlayer === 'White' ? 1 : -1;
   const startingRow = currentPlayer === 'White' ? 1 : 6;
 
-  if ((piece === 'p' && currentPlayer === 'Black') || (piece === 'P' && currentPlayer === 'White')) {
+  if ((piece === 'p' && currentPlayer === 'White') || (piece === 'P' && currentPlayer === 'Black')) {
     // Check if it's the correct player's turn
     console.log('It is not the current player\'s turn.');
     return false;
@@ -100,7 +103,7 @@ const isPawnMoveValid = (fromRow, fromCol, toRow, toCol, piece, currentPlayer) =
 
 const isRookMoveValid = (fromRow, fromCol, toRow, toCol, piece, currentPlayer) => { 
   
-  if ((piece === 'r' && currentPlayer === 'Black') || (piece === 'R' && currentPlayer === 'White')) {
+  if ((piece === 'r' && currentPlayer === 'White') || (piece === 'R' && currentPlayer === 'Black')) {
     console.log('It is not the current player\'s turn.');
     return false;
   }
@@ -144,7 +147,7 @@ const isRookMoveValid = (fromRow, fromCol, toRow, toCol, piece, currentPlayer) =
 const isKnightMoveValid = (fromRow, fromCol, toRow, toCol, piece, currentPlayer) => {
   const dx = Math.abs(toCol - fromCol);
   const dy = Math.abs(toRow - fromRow);
-  if ((piece === 'n' && currentPlayer === 'Black') || (piece === 'N' && currentPlayer === 'White')) {
+  if ((piece === 'n' && currentPlayer === 'White') || (piece === 'N' && currentPlayer === 'Black')) {
     console.log('It is not the current player\'s turn.');
     return false;
   }
@@ -175,7 +178,7 @@ const isKnightMoveValid = (fromRow, fromCol, toRow, toCol, piece, currentPlayer)
 const isBishopMoveValid = (fromRow, fromCol, toRow, toCol, piece, currentPlayer) => {
   const dx = Math.abs(toCol - fromCol);
   const dy = Math.abs(toRow - fromRow);
-  if ((piece === 'b' && currentPlayer === 'Black') || (piece === 'B' && currentPlayer === 'White')) {
+  if ((piece === 'b' && currentPlayer === 'White') || (piece === 'B' && currentPlayer === 'Black')) {
     console.log('It is not the current player\'s turn.');
     return false;
   }
@@ -219,7 +222,7 @@ const isBishopMoveValid = (fromRow, fromCol, toRow, toCol, piece, currentPlayer)
 const isQueenMoveValid = (fromRow, fromCol, toRow, toCol, piece, currentPlayer) => {
   const dx = Math.abs(toCol - fromCol);
   const dy = Math.abs(toRow - fromRow);
-  if ((piece === 'q' && currentPlayer === 'Black') || (piece === 'Q' && currentPlayer === 'White')) {
+  if ((piece === 'q' && currentPlayer === 'White') || (piece === 'Q' && currentPlayer === 'Black')) {
     console.log('It is not the current player\'s turn.');
     return false;
   }
@@ -286,7 +289,7 @@ const isQueenMoveValid = (fromRow, fromCol, toRow, toCol, piece, currentPlayer) 
 const isKingMoveValid = (fromRow, fromCol, toRow, toCol, piece, currentPlayer) => {
   const dx = Math.abs(toCol - fromCol);
   const dy = Math.abs(toRow - fromRow);
-  if ((piece === 'k' && currentPlayer === 'Black') || (piece === 'K' && currentPlayer === 'King')) {
+  if ((piece === 'k' && currentPlayer === 'White') || (piece === 'K' && currentPlayer === 'Black')) {
     console.log('It is not the current player\'s turn.');
     return false;
   }
@@ -366,7 +369,8 @@ for (let row = 0; row < 8; row++) {
                 {
                 piece && (
                     <div className="chess-piece">
-                        {piece} </div>
+                        {piece && <ChessPiece piece={piece} />}
+ </div>
                 )
             } </div>
         );
@@ -377,9 +381,8 @@ return (
   <div>
           <PlayerTurn currentPlayer={currentPlayer} /> {/* Render the PlayerTurn component */}
 
-    <div className="chessboard">{board}</div>
-  </div>
-);
-};
+<div div className = "chessboard-container" > <div className="chessboard">
+    {board} </div></div></div>);};
+
 
 export default Chessboard;
