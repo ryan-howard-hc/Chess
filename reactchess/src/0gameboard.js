@@ -134,6 +134,44 @@ const isKnightMoveValid = (fromRow, fromCol, toRow, toCol, piece) => {
 };
 
 
+const isBishopMoveValid = (fromRow, fromCol, toRow, toCol, piece) => {
+  const dx = Math.abs(toCol - fromCol);
+  const dy = Math.abs(toRow - fromRow);
+
+  // Bishops move diagonally, so dx should equal dy for a valid move.
+  if (dx === dy) {
+    const rowStep = fromRow < toRow ? 1 : -1;
+    const colStep = fromCol < toCol ? 1 : -1;
+    let currentRow = fromRow + rowStep;
+    let currentCol = fromCol + colStep;
+
+    while (currentRow !== toRow || currentCol !== toCol) {
+      // Check if there are any pieces blocking the path
+      if (boardState[currentRow][currentCol] !== ' ') {
+        console.log('Invalid move, blocked by piece');
+        return false;
+      }
+
+      currentRow += rowStep;
+      currentCol += colStep;
+    }
+
+    // Check if the destination square is empty or has an opponent's piece
+    if (
+      boardState[toRow][toCol] === ' ' ||
+      (piece === piece.toUpperCase() && boardState[toRow][toCol] === boardState[toRow][toCol].toLowerCase()) ||
+      (piece === piece.toLowerCase() && boardState[toRow][toCol] === boardState[toRow][toCol].toUpperCase())
+    ) {
+      console.log('Valid move for bishop');
+      return true;
+    }
+  }
+
+  console.log('Invalid move for bishop');
+  return false;
+};
+
+
 const board = [];
 
 for (let row = 0; row < 8; row++) {
@@ -165,6 +203,8 @@ for (let row = 0; row < 8; row++) {
                           isValidMove = isRookMoveValid(selectedPiece.row, selectedPiece.col, row, col, piece);
                         } else if (piece === 'N' || piece === 'n') {
                           isValidMove = isKnightMoveValid(selectedPiece.row, selectedPiece.col, row, col, piece);
+                        } else if (piece === 'B' || piece === 'b') {
+                          isValidMove = isBishopMoveValid(selectedPiece.row, selectedPiece.col, row, col, piece);
                         }
 
                         if (isValidMove) {
