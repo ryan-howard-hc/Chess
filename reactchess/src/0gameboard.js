@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../src/css/chessboard.css';
-
+// import PlayerTurn from './07playerturns';
 const Chessboard = () => {
+  // const [currentPlayer, setCurrentPlayer] = useState('Player 1');
+
+  // const handleTurnChange = (newPlayer) => {
+  //   setCurrentPlayer(newPlayer);
+  // };
   const initialBoardState = [
     ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'],
     ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
@@ -198,7 +203,7 @@ const isQueenMoveValid = (fromRow, fromCol, toRow, toCol, piece) => {
   const dx = Math.abs(toCol - fromCol);
   const dy = Math.abs(toRow - fromRow);
 
-  // Queens can move diagonally or in a straight line
+  // Queen can move diagonally or in a straight line
   if (dx === dy || fromRow === toRow || fromCol === toCol) {
     // if the path is clear for a straight line move
     if (fromRow === toRow || fromCol === toCol) {
@@ -262,9 +267,9 @@ const isKingMoveValid = (fromRow, fromCol, toRow, toCol, piece) => {
   const dx = Math.abs(toCol - fromCol);
   const dy = Math.abs(toRow - fromRow);
 
-  // Kings can move one square in any direction
+  // King can move one square in any direction
   if (dx <= 1 && dy <= 1) {
-    // Check if the destination square is empty or has an opponent's piece
+    // if the destination square is empty or has an opponent's piece
     if (
       boardState[toRow][toCol] === ' ' ||
       (piece === piece.toUpperCase() && boardState[toRow][toCol] === boardState[toRow][toCol].toLowerCase()) ||
@@ -345,6 +350,12 @@ for (let row = 0; row < 8; row++) {
     }
 }
 
-return <div className="chessboard">
-    {board}</div>;};export default Chessboard;
+return (
+  <div>
+    {/* <PlayerTurn currentPlayer={currentPlayer} onTurnChange={handleTurnChange} /> */}
+    <div className="chessboard">{board}</div>
+  </div>
+);
+};
 
+export default Chessboard;
