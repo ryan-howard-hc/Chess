@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../src/css/chessboard.css';
 import PlayerTurn from './07playerturns';
@@ -6,7 +6,6 @@ import ChessPiece from './01chesspiece';
 import EasyModeToggle from './02easymode';
 const Chessboard = () => {
 const [easyMode, setEasyMode] = useState(false);
-const [validMoves, setValidMoves] = useState([]);
 
 const initialBoardState = [
 
@@ -22,6 +21,7 @@ const initialBoardState = [
 ];
 
 const [currentPlayer, setCurrentPlayer] = useState('White');
+const [validMovePositions, setValidMovePositions] = useState([]);
 
 const [boardState, setBoardState] = useState(initialBoardState);
 const [selectedPiece, setSelectedPiece] = useState(null);
@@ -33,33 +33,30 @@ const toggleEasyMode = () => {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 const movePiece = (fromRow, fromCol, toRow, toCol) => {
-  if (fromRow === toRow && fromCol === toCol) {
-    return;
-  }
+    if (fromRow === toRow && fromCol === toCol) {
+        return;
+    }
 
-  const newBoardState = [...boardState];
-  const piece = newBoardState[fromRow][fromCol];
+    const newBoardState = [...boardState];
+    const piece = newBoardState[fromRow][fromCol];
 
-  console.log('Moving piece:', piece);
-  console.log('From:', fromRow, fromCol);
-  console.log('To:', toRow, toCol);
+    console.log('Moving piece:', piece);
+    console.log('From:', fromRow, fromCol);
+    console.log('To:', toRow, toCol);
 
-  if (newBoardState[toRow][toCol] !== ' ') {
-    console.log('Capturing piece at destination:', newBoardState[toRow][toCol]);
-    newBoardState[toRow][toCol] = ' ';
-  }
+    if (newBoardState[toRow][toCol] !== ' ') {
+        console.log('Capturing piece at destination:', newBoardState[toRow][toCol]);
+        newBoardState[toRow][toCol] = ' ';
+    }
 
-  newBoardState[toRow][toCol] = piece;
-  newBoardState[fromRow][fromCol] = ' ';
+    newBoardState[toRow][toCol] = piece;
+    newBoardState[fromRow][fromCol] = ' ';
 
-  console.log('Updated board state:', newBoardState);
+    console.log('Updated board state:', newBoardState);
 
-  setBoardState(newBoardState);
-  setCurrentPlayer(currentPlayer === 'White' ? 'Black' : 'White');
+    setBoardState(newBoardState);
+    setCurrentPlayer(currentPlayer === 'White' ? 'Black' : 'White');
 
-  // Clear valid moves and selected piece after the move
-  setSelectedPiece(null);
-  setValidMoves([]);
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -320,7 +317,35 @@ const isKingMoveValid = (fromRow, fromCol, toRow, toCol, piece, currentPlayer) =
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+const updateValidMovePositions = (row, col) => {
+  const piece = boardState[row][col];
+  let validPositions = [];
 
+  if (piece === 'P' || piece === 'p') {
+    validPositions = isPawnMoveValid(row, col, piece, currentPlayer);
+  } else if (piece === 'R' || piece === 'r') {
+    validPositions = isRookMoveValid(row, col, piece, currentPlayer);
+  } else if (piece === 'N' || piece === 'n') {
+    validPositions = isKnightMoveValid(row, col, piece, currentPlayer);
+  } else if (piece === 'B' || piece === 'b') {
+    validPositions = isBishopMoveValid(row, col, piece, currentPlayer);
+  } else if (piece === 'Q' || piece === 'q') {
+    validPositions = isQueenMoveValid(row, col, piece, currentPlayer);
+  } else if (piece === 'K' || piece === 'k') {
+    validPositions = isKingMoveValid(row, col, piece, currentPlayer);
+  }
+
+  setValidMovePositions(validPositions);
+};
+
+useEffect(() => {
+  if (selectedPiece !== null) {
+    const [row, col] = [selectedPiece.row, selectedPiece.col];
+    updateValidMovePositions(row, col);
+  } else {
+    setValidMovePositions([]);
+  }
+}, [selectedPiece, currentPlayer]);
 
 
 const board = [];
@@ -337,8 +362,9 @@ for (let row = 0; row < 8; row++) {
 
         board.push (
             <div key={squareId}
-            className={`square ${squareColor} ${selectedPiece && validMoves.includes(`${row}-${col}`) ? 'highlighted' : ''}`}
-
+                className={
+                    `square ${squareColor}`
+                }
                 onClick={
                     () => {
                         if (selectedPiece === null) {
@@ -371,10 +397,7 @@ for (let row = 0; row < 8; row++) {
                             }
                             setSelectedPiece(null);
                         }
-                        console.log('Valid moves:', validMoves);
-
                     }
-                    
             }>
                 {
                 piece && (
@@ -403,3 +426,10 @@ return (
 };
 
 export default Chessboard;
+
+
+
+// else {
+//   alert('Invalid move for the selected piece.');
+//   console.log('Invalid move for the selected piece.');
+// }
