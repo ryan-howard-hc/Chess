@@ -6,7 +6,7 @@ import ChessPiece from './01chesspiece';
 import EasyModeToggle from './02easymode';
 const Chessboard = () => {
 const [easyMode, setEasyMode] = useState(false);   //sets initial state for my easy mode component to be turned off
-const [validMoves, setValidMoves] = useState([]);   //declares state variable and corresponding setter function. Valid moves is initialized as an empty array for storing moves where the pieces can and cannot go based on where a piece has been moved to, taken, etc
+const [validMovesForSelectedPiece, setValidMovesForSelectedPiece] = useState([]);  //declares state variable and corresponding setter function. Valid moves is initialized as an empty array for storing moves where the pieces can and cannot go based on where a piece has been moved to, taken, etc
 
 const initialBoardState = [
 
@@ -61,7 +61,6 @@ const movePiece = (fromRow, fromCol, toRow, toCol) => {    // function takes the
 
   // Clear valid moves and selected piece after the move to prepare for next player's turn
   setSelectedPiece(null);
-  setValidMoves([]);
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -73,7 +72,7 @@ const isPawnMoveValid = (fromRow, fromCol, toRow, toCol, piece, currentPlayer) =
   const startingRow = currentPlayer === 'White' ? 1 : 6;
 
   if ((piece === 'p' && currentPlayer === 'White') || (piece === 'P' && currentPlayer === 'Black')) {
-    // Check if it's the correct player's turn
+    // checks if it's the correct player's turn
     console.log('It is not the current player\'s turn.');
     return false;
   }
@@ -324,31 +323,580 @@ const isKingMoveValid = (fromRow, fromCol, toRow, toCol, piece, currentPlayer) =
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 const updateValidMovePositions = (row, col) => {
   const piece = boardState[row][col];
-  let validPositions = [];
+  const validPositions = [];
 
-  if (piece === 'P' || piece === 'p') {
-    validPositions = isPawnMoveValid(row, col, piece, currentPlayer);
-  } else if (piece === 'R' || piece === 'r') {
-    validPositions = isRookMoveValid(row, col, piece, currentPlayer);
-  } else if (piece === 'N' || piece === 'n') {
-    validPositions = isKnightMoveValid(row, col, piece, currentPlayer);
-  } else if (piece === 'B' || piece === 'b') {
-    validPositions = isBishopMoveValid(row, col, piece, currentPlayer);
-  } else if (piece === 'Q' || piece === 'q') {
-    validPositions = isQueenMoveValid(row, col, piece, currentPlayer);
-  } else if (piece === 'K' || piece === 'k') {
-    validPositions = isKingMoveValid(row, col, piece, currentPlayer);
+  if (piece === 'P' && currentPlayer === 'White') {
+    // checks if the pawn can move one square forward
+    if (row + 1 < 8 && boardState[row + 1][col] === ' ') {
+      validPositions.push({ row: row + 1, col });
+    }
+  
+    // checks if the pawn can move two squares forward from its starting position
+    if (row === 1 && boardState[row + 1][col] === ' ' && boardState[row + 2][col] === ' ') {
+      validPositions.push({ row: row + 2, col });
+    }
+  
+    // checks if the pawn can capture diagonally to the right
+    if (col + 1 < 8 && row + 1 < 8 && boardState[row + 1][col + 1] !== ' ' && boardState[row + 1][col + 1].toUpperCase() === 'B') {
+      validPositions.push({ row: row + 1, col: col + 1 });
+    }
+  
+    // checks if the pawn can capture diagonally to the left
+    if (col - 1 >= 0 && row + 1 < 8 && boardState[row + 1][col - 1] !== ' ' && boardState[row + 1][col - 1].toUpperCase() === 'B') {
+      validPositions.push({ row: row + 1, col: col - 1 });
+    }
+    console.log('Valid move positions:', validPositions);
+
+  } else if (piece === 'p' && currentPlayer === 'Black') {
+
+
+    // checks if the pawn can move one square forward
+    if (row - 1 >= 0 && boardState[row - 1][col] === ' ') {
+      validPositions.push({ row: row - 1, col });
+    }
+  
+    // checks if the pawn can move two squares forward from its starting position
+    if (row === 6 && boardState[row - 1][col] === ' ' && boardState[row - 2][col] === ' ') {
+      validPositions.push({ row: row - 2, col });
+    }
+  
+    // checks if the pawn can capture diagonally to the right
+    if (col + 1 < 8 && row - 1 >= 0 && boardState[row - 1][col + 1] !== ' ' && boardState[row - 1][col + 1].toUpperCase() === 'W') {
+      validPositions.push({ row: row - 1, col: col + 1 });
+    }
+  
+    // checks if the pawn can capture diagonally to the left
+    if (col - 1 >= 0 && row - 1 >= 0 && boardState[row - 1][col - 1] !== ' ' && boardState[row - 1][col - 1].toUpperCase() === 'W') {
+      validPositions.push({ row: row - 1, col: col - 1 });
+    }
+  
+  
+  console.log('Valid move positions:', validPositions);
+  
+
+
+}else if (piece === 'R' && currentPlayer === 'White') {
+    // Check valid moves for the rook in the upward direction
+    for (let r = row - 1; r >= 0; r--) {
+      if (boardState[r][col] === ' ') {
+        validPositions.push({ row: r, col });
+      } else if (boardState[r][col].toUpperCase() === 'B') {
+        validPositions.push({ row: r, col });
+        break; // Stop if there's an opponent's piece blocking the path
+      } else {
+        break; // Stop if there's a friendly piece blocking the path
+      }
+    }
+  
+    // Check valid moves for the rook in the downward direction
+    for (let r = row + 1; r < 8; r++) {
+      if (boardState[r][col] === ' ') {
+        validPositions.push({ row: r, col });
+      } else if (boardState[r][col].toUpperCase() === 'B') {
+        validPositions.push({ row: r, col });
+        break; // Stop if there's an opponent's piece blocking the path
+      } else {
+        break; // Stop if there's a friendly piece blocking the path
+      }
+    }
+  
+    // Check valid moves for the rook to the right
+    for (let c = col + 1; c < 8; c++) {
+      if (boardState[row][c] === ' ') {
+        validPositions.push({ row, col: c });
+      } else if (boardState[row][c].toUpperCase() === 'B') {
+        validPositions.push({ row, col: c });
+        break; // Stop if there's an opponent's piece blocking the path
+      } else {
+        break; // Stop if there's a friendly piece blocking the path
+      }
+    }
+  
+    // Check valid moves for the rook to the left
+    for (let c = col - 1; c >= 0; c--) {
+      if (boardState[row][c] === ' ') {
+        validPositions.push({ row, col: c });
+      } else if (boardState[row][c].toUpperCase() === 'B') {
+        validPositions.push({ row, col: c });
+        break; // Stop if there's an opponent's piece blocking the path
+      } else {
+        break; // Stop if there's a friendly piece blocking the path
+      }
+      console.log('Valid move positions for rook:', validPositions);
+
+    }
+
+  } else if (piece === 'r' && currentPlayer === 'Black') {
+    // Check valid moves for the rook in the upward direction
+    for (let r = row - 1; r >= 0; r--) {
+      if (boardState[r][col] === ' ') {
+        validPositions.push({ row: r, col });
+      } else if (boardState[r][col].toUpperCase() === 'W') {
+        validPositions.push({ row: r, col });
+        break; // Stop if there's an opponent's piece blocking the path
+      } else {
+        break; // Stop if there's a friendly piece blocking the path
+      }
+    }
+  
+    // Check valid moves for the rook in the downward direction
+    for (let r = row + 1; r < 8; r++) {
+      if (boardState[r][col] === ' ') {
+        validPositions.push({ row: r, col });
+      } else if (boardState[r][col].toUpperCase() === 'W') {
+        validPositions.push({ row: r, col });
+        break; // Stop if there's an opponent's piece blocking the path
+      } else {
+        break; // Stop if there's a friendly piece blocking the path
+      }
+    }
+  
+    // Check valid moves for the rook to the right
+    for (let c = col + 1; c < 8; c++) {
+      if (boardState[row][c] === ' ') {
+        validPositions.push({ row, col: c });
+      } else if (boardState[row][c].toUpperCase() === 'W') {
+        validPositions.push({ row, col: c });
+        break; // Stop if there's an opponent's piece blocking the path
+      } else {
+        break; // Stop if there's a friendly piece blocking the path
+      }
+    }
+  
+    // Check valid moves for the rook to the left
+    for (let c = col - 1; c >= 0; c--) {
+      if (boardState[row][c] === ' ') {
+        validPositions.push({ row, col: c });
+      } else if (boardState[row][c].toUpperCase() === 'W') {
+        validPositions.push({ row, col: c });
+        break; // Stop if there's an opponent's piece blocking the path
+      } else {
+        break; // Stop if there's a friendly piece blocking the path
+      }
+    }
+    console.log('Valid move positions for rook:', validPositions);
+
   }
+  
 
-  setValidMovePositions(validPositions);
-};
+  else if (piece === 'N' && currentPlayer === 'White') {
+    const knightMoves = [
+      { row: row - 2, col: col + 1 },
+      { row: row - 2, col: col - 1 },
+      { row: row - 1, col: col + 2 },
+      { row: row - 1, col: col - 2 },
+      { row: row + 1, col: col + 2 },
+      { row: row + 1, col: col - 2 },
+      { row: row + 2, col: col + 1 },
+      { row: row + 2, col: col - 1 },
+    ];
+  
+    for (const move of knightMoves) {
+      const { row: newRow, col: newCol } = move;
+      if (newRow >= 0 && newRow < 8 && newCol >= 0 && newCol < 8) {
+        if (boardState[newRow][newCol] === ' ' || boardState[newRow][newCol].toUpperCase() === 'B') {
+          validPositions.push(move);
+        }
+      }
+      
+    }
+    console.log('Valid move positions for knight:', validPositions);
+
+  } else if (piece === 'n' && currentPlayer === 'Black') {
+    const knightMoves = [
+      { row: row - 2, col: col + 1 },
+      { row: row - 2, col: col - 1 },
+      { row: row - 1, col: col + 2 },
+      { row: row - 1, col: col - 2 },
+      { row: row + 1, col: col + 2 },
+      { row: row + 1, col: col - 2 },
+      { row: row + 2, col: col + 1 },
+      { row: row + 2, col: col - 1 },
+    ];
+  
+    for (const move of knightMoves) {
+      const { row: newRow, col: newCol } = move;
+      if (newRow >= 0 && newRow < 8 && newCol >= 0 && newCol < 8) {
+        if (boardState[newRow][newCol] === ' ' || boardState[newRow][newCol].toUpperCase() === 'W') {
+          validPositions.push(move);
+        }
+      }
+    }
+    console.log('Valid move positions for knight:', validPositions);
+
+  }
+  
+
+
+  else if (piece === 'B' && currentPlayer === 'White') {
+    // Check valid moves for the bishop diagonally to the upper right
+    for (let r = row - 1, c = col + 1; r >= 0 && c < 8; r--, c++) {
+      if (boardState[r][c] === ' ') {
+        validPositions.push({ row: r, col: c });
+      } else if (boardState[r][c].toUpperCase() === 'B') {
+        validPositions.push({ row: r, col: c });
+        break; // Stop if there's an opponent's piece blocking the path
+      } else {
+        break; // Stop if there's a friendly piece blocking the path
+      }
+    }
+  
+    // Check valid moves for the bishop diagonally to the upper left
+    for (let r = row - 1, c = col - 1; r >= 0 && c >= 0; r--, c--) {
+      if (boardState[r][c] === ' ') {
+        validPositions.push({ row: r, col: c });
+      } else if (boardState[r][c].toUpperCase() === 'B') {
+        validPositions.push({ row: r, col: c });
+        break; // Stop if there's an opponent's piece blocking the path
+      } else {
+        break; // Stop if there's a friendly piece blocking the path
+      }
+    }
+  
+    // Check valid moves for the bishop diagonally to the lower right
+    for (let r = row + 1, c = col + 1; r < 8 && c < 8; r++, c++) {
+      if (boardState[r][c] === ' ') {
+        validPositions.push({ row: r, col: c });
+      } else if (boardState[r][c].toUpperCase() === 'B') {
+        validPositions.push({ row: r, col: c });
+        break; // Stop if there's an opponent's piece blocking the path
+      } else {
+        break; // Stop if there's a friendly piece blocking the path
+      }
+    }
+  
+    // Check valid moves for the bishop diagonally to the lower left
+    for (let r = row + 1, c = col - 1; r < 8 && c >= 0; r++, c--) {
+      if (boardState[r][c] === ' ') {
+        validPositions.push({ row: r, col: c });
+      } else if (boardState[r][c].toUpperCase() === 'B') {
+        validPositions.push({ row: r, col: c });
+        break; // Stop if there's an opponent's piece blocking the path
+      } else {
+        break; // Stop if there's a friendly piece blocking the path
+      }
+    }
+    console.log('Valid move positions for bishop:', validPositions);
+
+  } else if (piece === 'b' && currentPlayer === 'Black') {
+    // Check valid moves for the bishop diagonally to the upper right
+    for (let r = row - 1, c = col + 1; r >= 0 && c < 8; r--, c++) {
+      if (boardState[r][c] === ' ') {
+        validPositions.push({ row: r, col: c });
+      } else if (boardState[r][c].toUpperCase() === 'W') {
+        validPositions.push({ row: r, col: c });
+        break; // Stop if there's an opponent's piece blocking the path
+      } else {
+        break; // Stop if there's a friendly piece blocking the path
+      }
+    }
+  
+    // Check valid moves for the bishop diagonally to the upper left
+    for (let r = row - 1, c = col - 1; r >= 0 && c >= 0; r--, c--) {
+      if (boardState[r][c] === ' ') {
+        validPositions.push({ row: r, col: c });
+      } else if (boardState[r][c].toUpperCase() === 'W') {
+        validPositions.push({ row: r, col: c });
+        break; // Stop if there's an opponent's piece blocking the path
+      } else {
+        break; // Stop if there's a friendly piece blocking the path
+      }
+    }
+  
+    // Check valid moves for the bishop diagonally to the lower right
+    for (let r = row + 1, c = col + 1; r < 8 && c < 8; r++, c++) {
+      if (boardState[r][c] === ' ') {
+        validPositions.push({ row: r, col: c });
+      } else if (boardState[r][c].toUpperCase() === 'W') {
+        validPositions.push({ row: r, col: c });
+        break; // Stop if there's an opponent's piece blocking the path
+      } else {
+        break; // Stop if there's a friendly piece blocking the path
+      }
+    }
+  
+    // Check valid moves for the bishop diagonally to the lower left
+    for (let r = row + 1, c = col - 1; r < 8 && c >= 0; r++, c--) {
+      if (boardState[r][c] === ' ') {
+        validPositions.push({ row: r, col: c });
+      } else if (boardState[r][c].toUpperCase() === 'W') {
+        validPositions.push({ row: r, col: c });
+        break; // Stop if there's an opponent's piece blocking the path
+      } else {
+        break; // Stop if there's a friendly piece blocking the path
+      }
+    }
+    console.log('Valid move positions for bishop:', validPositions);
+
+  }
+  
+
+
+  else if (piece === 'Q' && currentPlayer === 'White') {
+    // Check valid moves for the queen horizontally to the right
+    for (let c = col + 1; c < 8; c++) {
+      if (boardState[row][c] === ' ') {
+        validPositions.push({ row, col: c });
+      } else if (boardState[row][c].toUpperCase() === 'B') {
+        validPositions.push({ row, col: c });
+        break; // Stop if there's an opponent's piece blocking the path
+      } else {
+        break; // Stop if there's a friendly piece blocking the path
+      }
+    }
+  
+    // Check valid moves for the queen horizontally to the left
+    for (let c = col - 1; c >= 0; c--) {
+      if (boardState[row][c] === ' ') {
+        validPositions.push({ row, col: c });
+      } else if (boardState[row][c].toUpperCase() === 'B') {
+        validPositions.push({ row, col: c });
+        break; // Stop if there's an opponent's piece blocking the path
+      } else {
+        break; // Stop if there's a friendly piece blocking the path
+      }
+    }
+  
+    // Check valid moves for the queen vertically upwards
+    for (let r = row - 1; r >= 0; r--) {
+      if (boardState[r][col] === ' ') {
+        validPositions.push({ row: r, col });
+      } else if (boardState[r][col].toUpperCase() === 'B') {
+        validPositions.push({ row: r, col });
+        break; // Stop if there's an opponent's piece blocking the path
+      } else {
+        break; // Stop if there's a friendly piece blocking the path
+      }
+    }
+  
+    // Check valid moves for the queen vertically downwards
+    for (let r = row + 1; r < 8; r++) {
+      if (boardState[r][col] === ' ') {
+        validPositions.push({ row: r, col });
+      } else if (boardState[r][col].toUpperCase() === 'B') {
+        validPositions.push({ row: r, col });
+        break; // Stop if there's an opponent's piece blocking the path
+      } else {
+        break; // Stop if there's a friendly piece blocking the path
+      }
+    }
+  
+    // Check valid moves for the queen diagonally to the upper right
+    for (let r = row - 1, c = col + 1; r >= 0 && c < 8; r--, c++) {
+      if (boardState[r][c] === ' ') {
+        validPositions.push({ row: r, col: c });
+      } else if (boardState[r][c].toUpperCase() === 'B') {
+        validPositions.push({ row: r, col: c });
+        break; // Stop if there's an opponent's piece blocking the path
+      } else {
+        break; // Stop if there's a friendly piece blocking the path
+      }
+    }
+  
+    // Check valid moves for the queen diagonally to the upper left
+    for (let r = row - 1, c = col - 1; r >= 0 && c >= 0; r--, c--) {
+      if (boardState[r][c] === ' ') {
+        validPositions.push({ row: r, col: c });
+      } else if (boardState[r][c].toUpperCase() === 'B') {
+        validPositions.push({ row: r, col: c });
+        break; // Stop if there's an opponent's piece blocking the path
+      } else {
+        break; // Stop if there's a friendly piece blocking the path
+      }
+    }
+  
+    // Check valid moves for the queen diagonally to the lower right
+    for (let r = row + 1, c = col + 1; r < 8 && c < 8; r++, c++) {
+      if (boardState[r][c] === ' ') {
+        validPositions.push({ row: r, col: c });
+      } else if (boardState[r][c].toUpperCase() === 'B') {
+        validPositions.push({ row: r, col: c });
+        break; // Stop if there's an opponent's piece blocking the path
+      } else {
+        break; // Stop if there's a friendly piece blocking the path
+      }
+    }
+  
+    // Check valid moves for the queen diagonally to the lower left
+    for (let r = row + 1, c = col - 1; r < 8 && c >= 0; r++, c--) {
+      if (boardState[r][c] === ' ') {
+        validPositions.push({ row: r, col: c });
+      } else if (boardState[r][c].toUpperCase() === 'B') {
+        validPositions.push({ row: r, col: c });
+        break; // Stop if there's an opponent's piece blocking the path
+      } else {
+        break; // Stop if there's a friendly piece blocking the path
+      }
+    }
+    console.log('Valid move positions for queen:', validPositions);
+
+  } else if (piece === 'q' && currentPlayer === 'Black') {
+    // Check valid moves for the queen horizontally to the right
+    for (let c = col + 1; c < 8; c++) {
+      if (boardState[row][c] === ' ') {
+        validPositions.push({ row, col: c });
+      } else if (boardState[row][c].toUpperCase() === 'W') {
+        validPositions.push({ row, col: c });
+        break; // Stop if there's an opponent's piece blocking the path
+      } else {
+        break; // Stop if there's a friendly piece blocking the path
+      }
+    }
+  
+    // Check valid moves for the queen horizontally to the left
+    for (let c = col - 1; c >= 0; c--) {
+      if (boardState[row][c] === ' ') {
+        validPositions.push({ row, col: c });
+      } else if (boardState[row][c].toUpperCase() === 'W') {
+        validPositions.push({ row, col: c });
+        break; // Stop if there's an opponent's piece blocking the path
+      } else {
+        break; // Stop if there's a friendly piece blocking the path
+      }
+    }
+  
+    // Check valid moves for the queen vertically upwards
+    for (let r = row - 1; r >= 0; r--) {
+      if (boardState[r][col] === ' ') {
+        validPositions.push({ row: r, col });
+      } else if (boardState[r][col].toUpperCase() === 'W') {
+        validPositions.push({ row: r, col });
+        break; // Stop if there's an opponent's piece blocking the path
+      } else {
+        break; // Stop if there's a friendly piece blocking the path
+      }
+    }
+  
+    // Check valid moves for the queen vertically downwards
+    for (let r = row + 1; r < 8; r++) {
+      if (boardState[r][col] === ' ') {
+        validPositions.push({ row: r, col });
+      } else if (boardState[r][col].toUpperCase() === 'W') {
+        validPositions.push({ row: r, col });
+        break; // Stop if there's an opponent's piece blocking the path
+      } else {
+        break; // Stop if there's a friendly piece blocking the path
+      }
+    }
+  
+    // Check valid moves for the queen diagonally to the upper right
+    for (let r = row - 1, c = col + 1; r >= 0 && c < 8; r--, c++) {
+      if (boardState[r][c] === ' ') {
+        validPositions.push({ row: r, col: c });
+      } else if (boardState[r][c].toUpperCase() === 'W') {
+        validPositions.push({ row: r, col: c });
+        break; // Stop if there's an opponent's piece blocking the path
+      } else {
+        break; // Stop if there's a friendly piece blocking the path
+      }
+    }
+  
+    // Check valid moves for the queen diagonally to the upper left
+    for (let r = row - 1, c = col - 1; r >= 0 && c >= 0; r--, c--) {
+      if (boardState[r][c] === ' ') {
+        validPositions.push({ row: r, col: c });
+      } else if (boardState[r][c].toUpperCase() === 'W') {
+        validPositions.push({ row: r, col: c });
+        break; // Stop if there's an opponent's piece blocking the path
+      } else {
+        break; // Stop if there's a friendly piece blocking the path
+      }
+    }
+  
+    // Check valid moves for the queen diagonally to the lower right
+    for (let r = row + 1, c = col + 1; r < 8 && c < 8; r++, c++) {
+      if (boardState[r][c] === ' ') {
+        validPositions.push({ row: r, col: c });
+      } else if (boardState[r][c].toUpperCase() === 'W') {
+        validPositions.push({ row: r, col: c });
+        break; // Stop if there's an opponent's piece blocking the path
+      } else {
+        break; // Stop if there's a friendly piece blocking the path
+      }
+    }
+  
+    // Check valid moves for the queen diagonally to the lower left
+    for (let r = row + 1, c = col - 1; r < 8 && c >= 0; r++, c--) {
+      if (boardState[r][c] === ' ') {
+        validPositions.push({ row: r, col: c });
+      } else if (boardState[r][c].toUpperCase() === 'W') {
+        validPositions.push({ row: r, col: c });
+        break; // Stop if there's an opponent's piece blocking the path
+      } else {
+        break; // Stop if there's a friendly piece blocking the path
+      }
+    }
+    console.log('Valid move positions for queen:', validPositions);
+
+  }
+  
+
+  else if (piece === 'K' && currentPlayer === 'White') {
+    // Check valid moves for the king in all 8 directions
+    const directions = [
+      { row: -1, col: -1 },
+      { row: -1, col: 0 },
+      { row: -1, col: 1 },
+      { row: 0, col: -1 },
+      { row: 0, col: 1 },
+      { row: 1, col: -1 },
+      { row: 1, col: 0 },
+      { row: 1, col: 1 },
+    ];
+  
+    for (const direction of directions) {
+      const newRow = row + direction.row;
+      const newCol = col + direction.col;
+  
+      if (newRow >= 0 && newRow < 8 && newCol >= 0 && newCol < 8) {
+        if (boardState[newRow][newCol] === ' ' || boardState[newRow][newCol].toUpperCase() === 'B') {
+          validPositions.push({ row: newRow, col: newCol });
+        }
+      }
+    }
+      console.log('Valid move positions for king:', validPositions);
+
+  } else if (piece === 'k' && currentPlayer === 'Black') {
+    // Check valid moves for the king in all 8 directions
+    const directions = [
+      { row: -1, col: -1 },
+      { row: -1, col: 0 },
+      { row: -1, col: 1 },
+      { row: 0, col: -1 },
+      { row: 0, col: 1 },
+      { row: 1, col: -1 },
+      { row: 1, col: 0 },
+      { row: 1, col: 1 },
+    ];
+  
+    for (const direction of directions) {
+      const newRow = row + direction.row;
+      const newCol = col + direction.col;
+  
+      if (newRow >= 0 && newRow < 8 && newCol >= 0 && newCol < 8) {
+        if (boardState[newRow][newCol] === ' ' || boardState[newRow][newCol].toUpperCase() === 'W') {
+          validPositions.push({ row: newRow, col: newCol });
+        }
+      }
+    }
+    console.log('Valid move positions for king:', validPositions);
+
+  }
+  setValidMovesForSelectedPiece(validPositions);
+
+  };
+
+
 
 useEffect(() => {
   if (selectedPiece !== null) {
     const [row, col] = [selectedPiece.row, selectedPiece.col];
     updateValidMovePositions(row, col);
+
   } else {
     setValidMovePositions([]);
+    console.log(    setValidMovePositions([])
+    );
   }
 }, [selectedPiece, currentPlayer]);
 
@@ -370,12 +918,12 @@ for (let row = 0; row < 8; row++) {
                 className={
                     `square ${squareColor}`
                 }
-                onClick={
-                    () => {
-                        if (selectedPiece === null) {
-                            setSelectedPiece({row, col});
-                            console.log('Selected Piece:', boardState[row][col]);
-                        } else {
+                onClick={() => {
+                  if (selectedPiece === null) {
+                    setSelectedPiece({ row, col });
+                    updateValidMovePositions(row, col); // Update valid moves when a piece is selected
+                    console.log('Selected Piece:', boardState[row][col]);
+                  } else {
                             const piece = boardState[selectedPiece.row][selectedPiece.col];
                             let isValidMove = false;
 
