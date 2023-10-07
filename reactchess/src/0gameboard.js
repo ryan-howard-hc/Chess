@@ -27,6 +27,11 @@ const [validMovePositions, setValidMovePositions] = useState([]);
 const [boardState, setBoardState] = useState(initialBoardState);
 const [selectedPiece, setSelectedPiece] = useState(null);
 
+const [pieceDesign, setPieceDesign] = useState('default');
+  const togglePieceDesign = () => {
+    setPieceDesign(pieceDesign === 'default' ? 'alternate' : 'default');
+  };
+
 const toggleEasyMode = () => {
   setEasyMode(!easyMode);
 };
@@ -61,6 +66,7 @@ const movePiece = (fromRow, fromCol, toRow, toCol) => {    // function takes the
 
   // Clear valid moves and selected piece after the move to prepare for next player's turn
   setSelectedPiece(null);
+  setValidMovePositions([]);
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -883,22 +889,21 @@ const updateValidMovePositions = (row, col) => {
 
   }
   setValidMovesForSelectedPiece(validPositions);
-
+  console.log('Valid move positions:', validPositions);
+  setValidMovePositions([]);
   };
 
 
 
-useEffect(() => {
-  if (selectedPiece !== null) {
-    const [row, col] = [selectedPiece.row, selectedPiece.col];
-    updateValidMovePositions(row, col);
+// useEffect(() => {
+//   if (selectedPiece !== null) {
+//     const [row, col] = [selectedPiece.row, selectedPiece.col];
 
-  } else {
-    setValidMovePositions([]);
-    console.log(    setValidMovePositions([])
-    );
-  }
-}, [selectedPiece, currentPlayer]);
+//   } else {
+//     setValidMovePositions([]);
+//     console.log('Valid move positions cleared'    );
+//   }
+// }, [selectedPiece, currentPlayer]);
 
 
 const board = [];
@@ -915,6 +920,7 @@ for (let row = 0; row < 8; row++) {
       validMovesForSelectedPiece.some(
         (move) => move.row === row && move.col === col
       );
+      
 
     board.push(
       <div
@@ -925,6 +931,7 @@ for (let row = 0; row < 8; row++) {
                     setSelectedPiece({ row, col });
                     updateValidMovePositions(row, col); // Update valid moves when a piece is selected
                     console.log('Selected Piece:', boardState[row][col]);
+                    
                   } else {
                             const piece = boardState[selectedPiece.row][selectedPiece.col];
                             let isValidMove = false;
@@ -951,23 +958,30 @@ for (let row = 0; row < 8; row++) {
                                 console.log('Invalid move for the selected piece.');
                             }
                             setSelectedPiece(null);
+                            console.log('isSquareHighlighted:', isSquareHighlighted);
+
                         }
                     }
+                    
             }>
                 {
                 piece && (
                     <div className="chess-piece">
-                        {piece && <ChessPiece piece={piece} />}
+<ChessPiece piece={piece} design={pieceDesign} />
  </div>
                 )
             } </div>
+            
         );
+        
     }
+    
 }
 
 return (
   <div>
     <PlayerTurn currentPlayer={currentPlayer} />
+    <button onClick={togglePieceDesign}>Toggle Piece Design</button>
 
     {/* Render the EasyModeToggle component */}
     <EasyModeToggle easyMode={easyMode} toggleEasyMode={toggleEasyMode} />
@@ -976,7 +990,9 @@ return (
       <div className="chessboard">
 {board}      </div>
     </div>
+    
   </div>
+  
 );
 };
 
