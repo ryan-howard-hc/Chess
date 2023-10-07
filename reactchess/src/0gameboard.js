@@ -5,7 +5,8 @@ import PlayerTurn from './07playerturns';
 import ChessPiece from './01chesspiece';
 import EasyModeToggle from './02easymode';
 const Chessboard = () => {
-const [easyMode, setEasyMode] = useState(false);
+const [easyMode, setEasyMode] = useState(false);   //sets initial state for my easy mode component to be turned off
+const [validMoves, setValidMoves] = useState([]);   //declares state variable and corresponding setter function. Valid moves is initialized as an empty array for storing moves where the pieces can and cannot go based on where a piece has been moved to, taken, etc
 
 const initialBoardState = [
 
@@ -32,31 +33,35 @@ const toggleEasyMode = () => {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-const movePiece = (fromRow, fromCol, toRow, toCol) => {
-    if (fromRow === toRow && fromCol === toCol) {
-        return;
-    }
+const movePiece = (fromRow, fromCol, toRow, toCol) => {    // function takes the four coordinate parameters, from and to
+  if (fromRow === toRow && fromCol === toCol) { 
+    return; // if statement checks whether the source/destination are the same. therefore returns early and doesnt perform any actions
+  }
 
-    const newBoardState = [...boardState];
-    const piece = newBoardState[fromRow][fromCol];
+  const newBoardState = [...boardState]; //creates new shalow array, copies all the elements from the previous array. boardState is the 2d array of my board, this effectively helps keep the board the same while you can move or simulate/decide where your next piece will go. 
+  const piece = newBoardState[fromRow][fromCol];//new constant variable that assigns it the piece that was moved/found at the specified coordinates you pulled the piece from on the newBoardState
 
     console.log('Moving piece:', piece);
     console.log('From:', fromRow, fromCol);
     console.log('To:', toRow, toCol);
 
-    if (newBoardState[toRow][toCol] !== ' ') {
-        console.log('Capturing piece at destination:', newBoardState[toRow][toCol]);
-        newBoardState[toRow][toCol] = ' ';
-    }
+  if (newBoardState[toRow][toCol] !== ' ') {
+    console.log('Capturing piece at destination:', newBoardState[toRow][toCol]);
+    newBoardState[toRow][toCol] = ' ';
+  } //if statement checks if there is a piece at the destination coordinates based on the updated newBoardState and logs that a piece has been captured.
+    // (LATER in other functions determines whether each individual piece's logic will actually capture the target piece)
 
-    newBoardState[toRow][toCol] = piece;
-    newBoardState[fromRow][fromCol] = ' ';
+  newBoardState[toRow][toCol] = piece; 
+  newBoardState[fromRow][fromCol] = ' '; // these update to move the piece to the new coordinates, sets the cell it just moved from, back to empty
 
-    console.log('Updated board state:', newBoardState);
+  console.log('Updated board state:', newBoardState); 
 
-    setBoardState(newBoardState);
-    setCurrentPlayer(currentPlayer === 'White' ? 'Black' : 'White');
+  setBoardState(newBoardState); //updates the game board to log that a move has just been made.
+  setCurrentPlayer(currentPlayer === 'White' ? 'Black' : 'White'); //updates current player
 
+  // Clear valid moves and selected piece after the move to prepare for next player's turn
+  setSelectedPiece(null);
+  setValidMoves([]);
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
