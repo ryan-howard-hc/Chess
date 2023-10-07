@@ -97,7 +97,7 @@ const isPawnMoveValid = (fromRow, fromCol, toRow, toCol, piece, currentPlayer) =
       return true;
     }
 
-    if (Math.abs(fromCol - toCol) === 1 && (fromRow + direction === toRow || fromRow - direction === toRow) && boardState[toRow][toCol] !== ' ' && boardState[toRow][toCol] !== piece.toLowerCase()) {
+    if (Math.abs(fromCol - toCol) === 1 && (fromRow + direction === toRow || fromRow - direction === toRow) && boardState[toRow][toCol] !== ' ' && (piece === 'p' && boardState[toRow][toCol] === 'P' || piece === 'P' && boardState[toRow][toCol] === 'p')) {
       console.log('Valid capture');
       return true;
     }
