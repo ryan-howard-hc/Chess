@@ -1,0 +1,74 @@
+.chessboard-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+  background-color: antiquewhite;
+}
+
+.chessboard-column {
+
+}
+.chess-button:nth-child(1) {
+  background-color: rgb(208, 255, 208);
+  color: black;
+  border-color: rgb(208, 255, 208);
+  font-size: 30px;
+  margin-right: 20px;
+}
+.chess-button.active:nth-child(1) {
+  background-color: rgb(24, 210, 24);
+  color: black;
+  border-color: rgb(24, 210, 24);
+}
+
+ .chess-button:nth-child(2) {
+  color: black;
+  font-size: 30px;
+  border-color: rgb(208, 255, 208);
+  background-color: rgb(208, 255, 208);
+
+
+}
+
+.chessboard {
+  display: grid;
+  grid-template-columns: repeat(8, 70px);
+  grid-gap: 2px;
+  
+  background-color:#fcedf1}
+
+.square {
+  width: 70px;
+  height: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  background-color: #ccc;
+}
+
+.highlighted {
+  background-color: lightgreen !important;
+}
+
+.chess-piece {
+  font-size: 3rem; 
+  font-family: Arial, sans-serif; 
+}
+
+.taken-pieces-list {
+  display: flex;       
+  flex-direction: row; 
+  flex-wrap: wrap;     
+  justify-content: flex-start;
+  align-items: center;
+
+  justify-content: center;
+
+
+}
+
+.taken-piece {
+
+}
