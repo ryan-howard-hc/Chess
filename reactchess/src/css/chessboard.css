@@ -3,12 +3,11 @@
   justify-content: center;
   align-items: center;
   height: 80vh;
+  background-color: antiquewhite;
 }
 
 .chessboard-column {
 
-  justify-content: right;
-  margin-left: 360px;
 }
 .chess-button:nth-child(1) {
   background-color: rgb(208, 255, 208);
@@ -36,8 +35,8 @@
   display: grid;
   grid-template-columns: repeat(8, 70px);
   grid-gap: 2px;
-  background-color: #fff;
-}
+  
+  background-color:#fcedf1}
 
 .square {
   width: 70px;

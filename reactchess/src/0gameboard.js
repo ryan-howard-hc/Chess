@@ -980,9 +980,9 @@ for (let row = 0; row < 8; row++) {
 }
 
 return (
-  <div>
+  <div className="container col-12 col-md-12 ">
     <PlayerTurn currentPlayer={currentPlayer} />
-    <div className="btn-group mb-3">
+    <div className="btn-group mb-3 container col-6 col-md-6 ">
       <button 
           className={`btn btn-primary rounded chess-button ${easyMode ? 'active' : ''}`}
           onClick={toggleEasyMode}
@@ -999,16 +999,17 @@ return (
 
     </div>
 
-    <div className="container">
-      <div className="row">
+    <div className="container col-12 col-md-12 ">
+      <div className="row col-12 col-md-12">
+        
 
-        <div className="col-6 col-md-6 chessboard-column">
-          <div className="chessboard">
+        <div className="col-6 col-md-6 chessboard-column offset-md-3" >
+          <div className="chessboard "  style={{ marginLeft: '30px' }}>
             {board}
           </div>
         </div>
 
-        <div className="col-2 col-md-2">
+        <div className="col-2 col-md-2 offset-md-1">
           <div className="taken-pieces">
           <TakenPieces takenPieces={takenPieces} pieceDesign={pieceDesign} />
           </div>
