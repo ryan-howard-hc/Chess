@@ -907,17 +907,45 @@ const updateValidMovePositions = (row, col) => {
   setValidMovePositions([]);
   };
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////  
 
+const handleSquareClick = (row, col) => {
+  if (selectedPiece === null) {
+    setSelectedPiece({ row, col });
+    updateValidMovePositions(row, col);
+    console.log('Selected Piece:', boardState[row][col]);
+  } else {
+    const piece = boardState[selectedPiece.row][selectedPiece.col];
+    let isValidMove = false;
 
-// useEffect(() => {
-//   if (selectedPiece !== null) {
-//     const [row, col] = [selectedPiece.row, selectedPiece.col];
+    if (piece === 'P' || piece === 'p') {
+      isValidMove = isPawnMoveValid(selectedPiece.row, selectedPiece.col, row, col, piece, currentPlayer);
+    } else if (piece === 'R' || piece === 'r') {
+      isValidMove = isRookMoveValid(selectedPiece.row, selectedPiece.col, row, col, piece, currentPlayer);
+    } else if (piece === 'N' || piece === 'n') {
+      isValidMove = isKnightMoveValid(selectedPiece.row, selectedPiece.col, row, col, piece, currentPlayer);
+    } else if (piece === 'B' || piece === 'b') {
+      isValidMove = isBishopMoveValid(selectedPiece.row, selectedPiece.col, row, col, piece, currentPlayer);
+    } else if (piece === 'Q' || piece === 'q') {
+      isValidMove = isQueenMoveValid(selectedPiece.row, selectedPiece.col, row, col, piece, currentPlayer);
+    } else if (piece === 'K' || piece === 'k') {
+      isValidMove = isKingMoveValid(selectedPiece.row, selectedPiece.col, row, col, piece, currentPlayer);
+    }
 
-//   } else {
-//     setValidMovePositions([]);
-//     console.log('Valid move positions cleared'    );
-//   }
-// }, [selectedPiece, currentPlayer]);
+    if (isValidMove) {
+      movePiece(selectedPiece.row, selectedPiece.col, row, col);
+      console.log('Piece moved successfully');
+    } else {
+      alert('Invalid move for the selected piece.');
+      console.log('Invalid move for the selected piece.');
+    }
+    
+    setSelectedPiece(null);
+    setValidMovePositions([]);
+
+  }
+};
+
 
 
 const board = [];
@@ -934,60 +962,19 @@ for (let row = 0; row < 8; row++) {
       validMovesForSelectedPiece.some(
         (move) => move.row === row && move.col === col
       );
-      
-
-    board.push(
-      <div
-        key={squareId}
-        className={`square ${squareColor} ${isSquareHighlighted ? 'highlighted' : ''}`}
-                onClick={() => {
-                  if (selectedPiece === null) {
-                    setSelectedPiece({ row, col });
-                    updateValidMovePositions(row, col); // Update valid moves when a piece is selected
-                    console.log('Selected Piece:', boardState[row][col]);
-                    
-                  } else {
-                            const piece = boardState[selectedPiece.row][selectedPiece.col];
-                            let isValidMove = false;
-
-                            if (piece === 'P' || piece === 'p') {
-                                isValidMove = isPawnMoveValid(selectedPiece.row, selectedPiece.col, row, col, piece, currentPlayer);
-                            } else if (piece === 'R' || piece === 'r') {
-                                isValidMove = isRookMoveValid(selectedPiece.row, selectedPiece.col, row, col, piece, currentPlayer);
-                            } else if (piece === 'N' || piece === 'n') {
-                                isValidMove = isKnightMoveValid(selectedPiece.row, selectedPiece.col, row, col, piece, currentPlayer);
-                            } else if (piece === 'B' || piece === 'b') {
-                                isValidMove = isBishopMoveValid(selectedPiece.row, selectedPiece.col, row, col, piece, currentPlayer);
-                            } else if (piece === 'Q' || piece === 'q') {
-                                isValidMove = isQueenMoveValid(selectedPiece.row, selectedPiece.col, row, col, piece, currentPlayer);
-                            } else if (piece === 'K' || piece === 'k') {
-                                isValidMove = isKingMoveValid(selectedPiece.row, selectedPiece.col, row, col, piece, currentPlayer);
-                            }
-
-                            if (isValidMove) {
-                                movePiece(selectedPiece.row, selectedPiece.col, row, col);
-                                console.log('Piece moved successfully');
-                            } else {
-                                alert('Invalid move for the selected piece.');
-                                console.log('Invalid move for the selected piece.');
-                            }
-                            setSelectedPiece(null);
-                            console.log('isSquareHighlighted:', isSquareHighlighted);
-
-                        }
-                    }
-                    
-            }>
-                {
-                piece && (
-                    <div className="chess-piece">
-<ChessPiece piece={piece} design={pieceDesign} />
- </div>
-                )
-            } </div>
-            
-        );
-        
+      board.push(
+        <div
+          key={squareId}
+          className={`square ${squareColor} ${isSquareHighlighted ? 'highlighted' : ''}`}
+          onClick={() => handleSquareClick(row, col)} 
+        >
+          {piece && (
+            <div className="chess-piece">
+              <ChessPiece piece={piece} design={pieceDesign} />
+            </div>
+          )}
+        </div>
+      );
     }
     
 }
@@ -1034,10 +1021,3 @@ return (
 };
 
 export default Chessboard;
-
-
-
-// else {
-//   alert('Invalid move for the selected piece.');
-//   console.log('Invalid move for the selected piece.');
-// }
