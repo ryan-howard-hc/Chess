@@ -1007,7 +1007,7 @@ return (
         className="btn btn-primary rounded chess-button"
         onClick={togglePieceDesign}
       >
-        Toggle Piece Design
+        Change Pieces
       </button>
 
     </div>
@@ -1023,7 +1023,7 @@ return (
 
         <div className="col-2 col-md-2">
           <div className="taken-pieces">
-            <TakenPieces takenPieces={takenPieces} />
+          <TakenPieces takenPieces={takenPieces} pieceDesign={pieceDesign} />
           </div>
         </div>
 

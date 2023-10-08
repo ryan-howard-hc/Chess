@@ -1,9 +1,14 @@
 import React from 'react';
+import ChessPiece from './01chesspiece';
 
-const TakenPieces = ({ takenPieces }) => {
+const TakenPieces = ({ takenPieces, pieceDesign }) => {
   const takenPiecesList = takenPieces.map((piece, index) => (
     <div key={index} className="taken-piece">
-      {piece}
+      {piece && (
+        <div className="chess-piece">
+          <ChessPiece piece={piece} design={pieceDesign} />
+        </div>
+      )}
     </div>
   ));
 
