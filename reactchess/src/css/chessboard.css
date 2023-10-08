@@ -5,9 +5,33 @@
   height: 80vh;
 }
 
+.chessboard-column {
+
+  justify-content: right;
+  margin-left: 360px;
+}
+.chess-button:nth-child(1) {
+  border-radius: 16px;
+  background-color: rgb(208, 255, 208);
+  color: black;
+  border-color: rgb(208, 255, 208);
+  font-size: 30px;
+  margin-right: 20px;
+}
+.chess-button.active:nth-child(1) {
+  background-color: rgb(24, 210, 24);
+  color: black;
+  border-color: rgb(24, 210, 24);
+}
+
+ .chess-button:nth-child(2) {
+  border-radius: 16px;
+  color: black;
+}
+
 .chessboard {
   display: grid;
-  grid-template-columns: repeat(8, 70px); 
+  grid-template-columns: repeat(8, 70px);
   grid-gap: 2px;
   background-color: #fff;
 }
@@ -23,10 +47,10 @@
 }
 
 .highlighted {
-  background-color: lightgreen !important; 
+  background-color: lightgreen !important;
 }
 
 .chess-piece {
-  font-size: 3rem; /* Adjust the size as needed */
-  font-family: Arial, sans-serif; /* Specify a font that renders chess pieces uniformly */
+  font-size: 3rem; 
+  font-family: Arial, sans-serif; 
 }

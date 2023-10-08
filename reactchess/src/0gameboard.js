@@ -995,19 +995,41 @@ for (let row = 0; row < 8; row++) {
 return (
   <div>
     <PlayerTurn currentPlayer={currentPlayer} />
-    <button onClick={togglePieceDesign}>Toggle Piece Design</button>
+    <div className="btn-group mb-3">
+      <button 
+          className={`btn btn-primary rounded chess-button ${easyMode ? 'active' : ''}`}
+          onClick={toggleEasyMode}
+      >
+        Easy Mode
+      </button>
 
-    {/* Render the EasyModeToggle component */}
-    <EasyModeToggle easyMode={easyMode} toggleEasyMode={toggleEasyMode} />
+      <button
+        className="btn btn-primary rounded chess-button"
+        onClick={togglePieceDesign}
+      >
+        Toggle Piece Design
+      </button>
 
-    <div className="chessboard-container">
-      <div className="chessboard">
-{board}        <TakenPieces takenPieces={takenPieces} />
     </div>
+
+    <div className="container">
+      <div className="row">
+
+        <div className="col-6 col-md-6 chessboard-column">
+          <div className="chessboard">
+            {board}
+          </div>
+        </div>
+
+        <div className="col-2 col-md-2">
+          <div className="taken-pieces">
+            <TakenPieces takenPieces={takenPieces} />
+          </div>
+        </div>
+
+      </div>
     </div>
-    
   </div>
-  
 );
 };
 

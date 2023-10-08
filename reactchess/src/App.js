@@ -2,7 +2,6 @@ import './App.css';
 import React, { useState } from 'react';
 import Chessboard from './0gameboard';
 import PlayerTurn from './07playerturns';
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 function App() {
