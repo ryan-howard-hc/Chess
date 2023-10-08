@@ -23,6 +23,7 @@ import zombie from '../src/css/icons/zombie.png';
 import tree from '../src/css/icons/tree.png';
 import witch from '../src/css/icons/witch-hat.png';
 import peace from '../src/css/icons/peace.png';
+import skeleton from '../src/css/icons/skeleton.png';
 
 
 

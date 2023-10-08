@@ -25,3 +25,8 @@
 .highlighted {
   background-color: lightgreen !important; 
 }
+
+.chess-piece {
+  font-size: 3rem; /* Adjust the size as needed */
+  font-family: Arial, sans-serif; /* Specify a font that renders chess pieces uniformly */
+}

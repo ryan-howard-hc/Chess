@@ -4,6 +4,9 @@ import '../src/css/chessboard.css';
 import PlayerTurn from './07playerturns';
 import ChessPiece from './01chesspiece';
 import EasyModeToggle from './02easymode';
+import TakenPieces from './03takenpieces';
+
+
 const Chessboard = () => {
 const [easyMode, setEasyMode] = useState(false);   //sets initial state for my easy mode component to be turned off
 const [validMovesForSelectedPiece, setValidMovesForSelectedPiece] = useState([]);  //declares state variable and corresponding setter function. Valid moves is initialized as an empty array for storing moves where the pieces can and cannot go based on where a piece has been moved to, taken, etc
@@ -28,13 +31,23 @@ const [boardState, setBoardState] = useState(initialBoardState);
 const [selectedPiece, setSelectedPiece] = useState(null);
 
 const [pieceDesign, setPieceDesign] = useState('default');
-  const togglePieceDesign = () => {
-    setPieceDesign(pieceDesign === 'default' ? 'alternate' : 'default');
-  };
+const togglePieceDesign = () => {
+  if (pieceDesign === 'default') {
+    setPieceDesign('alternate');
+  } else if (pieceDesign === 'alternate') {
+    setPieceDesign('altAlt');
+  } else {
+    setPieceDesign('default');
+  }
+};
+
 
 const toggleEasyMode = () => {
   setEasyMode(!easyMode);
 };
+
+const [takenPieces, setTakenPieces] = useState([]); //refer to line 68
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -50,10 +63,11 @@ const movePiece = (fromRow, fromCol, toRow, toCol) => {    // function takes the
     console.log('From:', fromRow, fromCol);
     console.log('To:', toRow, toCol);
 
-  if (newBoardState[toRow][toCol] !== ' ') {
-    console.log('Capturing piece at destination:', newBoardState[toRow][toCol]);
-    newBoardState[toRow][toCol] = ' ';
-  } //if statement checks if there is a piece at the destination coordinates based on the updated newBoardState and logs that a piece has been captured.
+    if (newBoardState[toRow][toCol] !== ' ') {
+      console.log('Capturing piece at destination:', newBoardState[toRow][toCol]);
+      setTakenPieces([...takenPieces, newBoardState[toRow][toCol]]);
+      newBoardState[toRow][toCol] = ' ';
+    } //if statement checks if there is a piece at the destination coordinates based on the updated newBoardState and logs that a piece has been captured.
     // (LATER in other functions determines whether each individual piece's logic will actually capture the target piece)
 
   newBoardState[toRow][toCol] = piece; 
@@ -988,7 +1002,8 @@ return (
 
     <div className="chessboard-container">
       <div className="chessboard">
-{board}      </div>
+{board}        <TakenPieces takenPieces={takenPieces} />
+    </div>
     </div>
     
   </div>
