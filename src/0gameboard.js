@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { Modal, Button } from 'react-bootstrap';
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../src/css/chessboard.css';
 import PlayerTurn from './07playerturns';
@@ -907,6 +909,27 @@ const updateValidMovePositions = (row, col) => {
   setValidMovePositions([]);
   };
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+const [showModal, setShowModal] = useState(false);
+const openModal = () => {
+  setShowModal(true);
+};
+
+const closeModal = () => {
+  setShowModal(false);
+};
+const [showAlert, setShowAlert] = useState(false);
+
+const showNotification = (message) => {
+  setShowAlert(true);
+  setTimeout(() => {
+    setShowAlert(false);
+  }, 3000);
+};
+
+
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////  
 
 const handleSquareClick = (row, col) => {
@@ -936,13 +959,12 @@ const handleSquareClick = (row, col) => {
       movePiece(selectedPiece.row, selectedPiece.col, row, col);
       console.log('Piece moved successfully');
     } else {
-      alert('Invalid move for the selected piece.');
+      showNotification('Invalid move for the selected piece.');
       console.log('Invalid move for the selected piece.');
     }
-    
+
     setSelectedPiece(null);
     setValidMovePositions([]);
-
   }
 };
 
@@ -1004,11 +1026,16 @@ return (
         
 
         <div className="col-6 col-md-6 chessboard-column offset-md-3" >
+
           <div className="chessboard "  style={{ marginLeft: '30px' }}>
+            
             {board}
           </div>
+          
         </div>
-
+        <div className={`flash-alert${showAlert ? ' visible' : ''}`}>
+  Invalid move for the selected piece.
+</div>
         <div className="col-2 col-md-2 offset-md-1">
           <div className="taken-pieces">
           <TakenPieces takenPieces={takenPieces} pieceDesign={pieceDesign} />
@@ -1017,8 +1044,25 @@ return (
 
       </div>
     </div>
+
+
   </div>
 );
 };
 
 export default Chessboard;
+
+
+{/* <Modal show={showModal} onHide={() => setShowModal(false)} className="d-flex align-items-center justify-content-center">
+<Modal.Header closeButton>
+  <Modal.Title><h1 className="d-flex justify-content-center">oops!</h1></Modal.Title>
+</Modal.Header>
+<Modal.Body>
+  <p className="d-flex justify-content-center">Invalid move for the selected piece.</p>
+</Modal.Body>
+<Modal.Footer className="d-flex justify-content-center">
+  <Button variant="primary" onClick={() => setShowModal(false)}>
+    Close
+  </Button>
+</Modal.Footer>
+</Modal> */}

@@ -72,3 +72,30 @@
 .taken-piece {
 
 }
+
+.custom-modal {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.flash-alert {
+  position: fixed;
+  top: 20px; 
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 50px 50px;
+  border-radius: 5px;
+  font-size: 50px;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+  z-index: 999;
+  
+}
+
+.flash-alert.visible {
+  opacity: 1;
+}
