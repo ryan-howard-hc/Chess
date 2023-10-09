@@ -10,6 +10,12 @@ import TakenPieces from './03takenpieces';
 
 
 const Chessboard = () => {
+  // const [gameOver, setGameOver] = useState(false);
+  // const [checkmateMessage, setCheckmateMessage] = useState('');
+  // const [gameOverAlert, setGameOverAlert] = useState(false);
+  const [checkNotification, setCheckNotification] = useState(false);
+
+
 const [easyMode, setEasyMode] = useState(false);   //sets initial state for my easy mode component to be turned off
 const [validMovesForSelectedPiece, setValidMovesForSelectedPiece] = useState([]);  //declares state variable and corresponding setter function. Valid moves is initialized as an empty array for storing moves where the pieces can and cannot go based on where a piece has been moved to, taken, etc
 
@@ -911,6 +917,56 @@ const updateValidMovePositions = (row, col) => {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+// function isKingInCheck(currentPlayer) {
+//   const kingPiece = currentPlayer === 'White' ? 'K' : 'k';
+//   let kingPosition = null;
+
+//   // Find the position of the current player's king
+//   for (let row = 0; row < 8; row++) {
+//     for (let col = 0; col < 8; col++) {
+//       if (boardState[row][col] === kingPiece) {
+//         kingPosition = { row, col };
+//         break;
+//       }
+//     }
+//     if (kingPosition) break;
+//   }
+
+//   if (!kingPosition) {
+//     // Handle the case where the king is not found (an error or game over)
+//     return false;
+//   }
+
+//   const opponentColor = currentPlayer === 'White' ? 'Black' : 'White';
+//   const opponentValidMoves = [];
+
+//   // Calculate valid move positions for all opponent's pieces
+//   for (let row = 0; row < 8; row++) {
+//     for (let col = 0; col < 8; col++) {
+//       const piece = boardState[row][col];
+//       if (piece !== ' ' && piece.toUpperCase() !== kingPiece && piece.toUpperCase() !== currentPlayer.charAt(0)) {
+//         // This piece belongs to the opponent
+//         const validMoves = updateValidMovePositions(row, col);
+//         opponentValidMoves.push(...validMoves);
+//       }
+//     }
+//   }
+
+//   // Check if any opponent's valid move positions match the king's position
+//   for (const move of opponentValidMoves) {
+//     if (move.row === kingPosition.row && move.col === kingPosition.col) {
+//       // The king is in check
+//       return true;
+//     }
+//   }
+
+//   // The king is not in check
+//   return false;
+// }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 const [showModal, setShowModal] = useState(false);
 const openModal = () => {
   setShowModal(true);
@@ -928,11 +984,28 @@ const showNotification = (message) => {
   }, 3000);
 };
 
+// useEffect(() => {
+//   if (checkNotification) {
+//     const notificationTimeout = setTimeout(() => {
+//       setCheckNotification(false);
+//     }, 3000); // Adjust the timeout duration as needed (3 seconds in this example)
 
+//     return () => clearTimeout(notificationTimeout); // Clear the timeout on component unmount
+//   }
+// }, [checkNotification]);
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////  
 
 const handleSquareClick = (row, col) => {
+  // if (isCheckmate(currentPlayer)) {
+  //   setGameOver(true);
+  //   setCheckmateMessage(`${currentPlayer} is in checkmate! Game Over.`);
+  //   setGameOverAlert(true); // Show game over alert
+  //   // Hide the game over alert after 3 seconds (adjust the timeout duration as needed)
+  //   setTimeout(() => {
+  //     setGameOverAlert(false);
+  //   }, 3000);
+  // }
   if (selectedPiece === null) {
     setSelectedPiece({ row, col });
     updateValidMovePositions(row, col);
@@ -962,6 +1035,7 @@ const handleSquareClick = (row, col) => {
       showNotification('Invalid move for the selected piece.');
       console.log('Invalid move for the selected piece.');
     }
+    
 
     setSelectedPiece(null);
     setValidMovePositions([]);
@@ -1003,6 +1077,7 @@ for (let row = 0; row < 8; row++) {
 
 return (
   <div className="container col-12 col-md-12 ">
+    
     <PlayerTurn currentPlayer={currentPlayer} />
     <div className="btn-group mb-3 container col-6 col-md-6 ">
       <button 
@@ -1033,8 +1108,9 @@ return (
           </div>
           
         </div>
-        <div className={`flash-alert${showAlert ? ' visible' : ''}`}>
-  Invalid move for the selected piece.
+        <div className={`flash-alert${showAlert || checkNotification ? ' visible' : ''}`}>
+  {showAlert ? 'Invalid move for the selected piece.' : ''}
+  {checkNotification ? 'Check!' : ''}
 </div>
         <div className="col-2 col-md-2 offset-md-1">
           <div className="taken-pieces">
