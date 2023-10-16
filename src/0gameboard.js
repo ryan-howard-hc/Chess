@@ -88,7 +88,6 @@ const movePiece = (fromRow, fromCol, toRow, toCol) => {    // function takes the
 
   // Clear valid moves and selected piece after the move to prepare for next player's turn
   setSelectedPiece(null);
-  setValidMovePositions([]);
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -910,60 +909,46 @@ const updateValidMovePositions = (row, col) => {
     console.log('Valid move positions for king:', validPositions);
 
   }
-  setValidMovesForSelectedPiece(validPositions);
+  setValidMovesForSelectedPiece(validPositions);    //
   console.log('Valid move positions:', validPositions);
-  setValidMovePositions([]);
+
   };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// function isKingInCheck(currentPlayer, boardState, updateValidMovePositions) {
+//   const opponentColor = (currentPlayer === 'White') ? 'Black' : 'White';
+//   const kingSymbol = (currentPlayer === 'White') ? 'K' : 'k';
 
-// function isKingInCheck(currentPlayer) {
-//   const kingPiece = currentPlayer === 'White' ? 'K' : 'k';
-//   let kingPosition = null;
-
-//   // Find the position of the current player's king
+//   // Find the current position of the king
+//   let kingRow, kingCol;
 //   for (let row = 0; row < 8; row++) {
 //     for (let col = 0; col < 8; col++) {
-//       if (boardState[row][col] === kingPiece) {
-//         kingPosition = { row, col };
-//         break;
-//       }
-//     }
-//     if (kingPosition) break;
-//   }
-
-//   if (!kingPosition) {
-//     // Handle the case where the king is not found (an error or game over)
-//     return false;
-//   }
-
-//   const opponentColor = currentPlayer === 'White' ? 'Black' : 'White';
-//   const opponentValidMoves = [];
-
-//   // Calculate valid move positions for all opponent's pieces
-//   for (let row = 0; row < 8; row++) {
-//     for (let col = 0; col < 8; col++) {
-//       const piece = boardState[row][col];
-//       if (piece !== ' ' && piece.toUpperCase() !== kingPiece && piece.toUpperCase() !== currentPlayer.charAt(0)) {
-//         // This piece belongs to the opponent
-//         const validMoves = updateValidMovePositions(row, col);
-//         opponentValidMoves.push(...validMoves);
+//       if (boardState[row][col] === kingSymbol) {
+//         kingRow = row;
+//         kingCol = col;
 //       }
 //     }
 //   }
 
-//   // Check if any opponent's valid move positions match the king's position
-//   for (const move of opponentValidMoves) {
-//     if (move.row === kingPosition.row && move.col === kingPosition.col) {
-//       // The king is in check
-//       return true;
+//   // Iterate over opponent's pieces
+//   for (let row = 0; row < 8; row++) {
+//     for (let col = 0; col < 8; col++) {
+//       if (boardState[row][col].toUpperCase() === opponentColor) {
+//         const piece = boardState[row][col];
+//         const validMoves = updateValidMovePositions(piece, row, col, boardState, currentPlayer);
+
+//         // Check if any of the valid moves can capture the king
+//         if (validMoves.some(move => move.row === kingRow && move.col === kingCol)) {
+//           return true; // King is in check
+//         }
+//       }
 //     }
 //   }
 
-//   // The king is not in check
-//   return false;
+//   return false; // King is not in check
 // }
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -997,15 +982,7 @@ const showNotification = (message) => {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////  
 
 const handleSquareClick = (row, col) => {
-  // if (isCheckmate(currentPlayer)) {
-  //   setGameOver(true);
-  //   setCheckmateMessage(`${currentPlayer} is in checkmate! Game Over.`);
-  //   setGameOverAlert(true); // Show game over alert
-  //   // Hide the game over alert after 3 seconds (adjust the timeout duration as needed)
-  //   setTimeout(() => {
-  //     setGameOverAlert(false);
-  //   }, 3000);
-  // }
+
   if (selectedPiece === null) {
     setSelectedPiece({ row, col });
     updateValidMovePositions(row, col);
@@ -1031,14 +1008,16 @@ const handleSquareClick = (row, col) => {
     if (isValidMove) {
       movePiece(selectedPiece.row, selectedPiece.col, row, col);
       console.log('Piece moved successfully');
+      setValidMovesForSelectedPiece([]);  //resets the valid moves for easy mode/check functions
+      updateValidMovePositions(row, col); //offers the new valid moves to account for the check function that I need to make
+
+      
     } else {
       showNotification('Invalid move for the selected piece.');
       console.log('Invalid move for the selected piece.');
     }
     
 
-    setSelectedPiece(null);
-    setValidMovePositions([]);
   }
 };
 
@@ -1142,3 +1121,15 @@ export default Chessboard;
   </Button>
 </Modal.Footer>
 </Modal> */}
+
+
+
+  // if (isCheckmate(currentPlayer)) {
+  //   setGameOver(true);
+  //   setCheckmateMessage(`${currentPlayer} is in checkmate! Game Over.`);
+  //   setGameOverAlert(true); // Show game over alert
+  //   // Hide the game over alert after 3 seconds (adjust the timeout duration as needed)
+  //   setTimeout(() => {
+  //     setGameOverAlert(false);
+  //   }, 3000);
+  // }
