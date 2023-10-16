@@ -403,104 +403,105 @@ const updateValidMovePositions = (row, col) => {
 
 
 }else if (piece === 'R' && currentPlayer === 'White') {
-    // checks valid moves for the rook in the upward direction
-    for (let r = row - 1; r >= 0; r--) {
-      if (boardState[r][col] === ' ') {
-        validPositions.push({ row: r, col });
-      } else if (boardState[r][col].toUpperCase() === 'B') {
-        validPositions.push({ row: r, col });
-        break; // stops if there's an opponent's piece blocking the path
-      } else {
-        break; // stops if there's a friendly piece blocking the path
-      }
+  // checks valid moves for the rook in the upward direction
+  for (let r = row - 1; r >= 0; r--) {
+    if (boardState[r][col] === ' ') {
+      validPositions.push({ row: r, col });
+    } else if (/[bnkqpr]/.test(boardState[r][col])) {
+      validPositions.push({ row: r, col });
+      break; // Stop the loop when you encounter a piece
+    } else {
+      break;
     }
-  
-    // checks valid moves for the rook in the downward direction
-    for (let r = row + 1; r < 8; r++) {
-      if (boardState[r][col] === ' ') {
-        validPositions.push({ row: r, col });
-      } else if (boardState[r][col].toUpperCase() === 'B') {
-        validPositions.push({ row: r, col });
-        break; // stops if there's an opponent's piece blocking the path
-      } else {
-        break; // stops if there's a friendly piece blocking the path
-      }
-    }
-  
-    // checks valid moves for the rook to the right
-    for (let c = col + 1; c < 8; c++) {
-      if (boardState[row][c] === ' ') {
-        validPositions.push({ row, col: c });
-      } else if (boardState[row][c].toUpperCase() === 'B') {
-        validPositions.push({ row, col: c });
-        break; // stops if there's an opponent's piece blocking the path
-      } else {
-        break; // stops if there's a friendly piece blocking the path
-      }
-    }
-  
-    // checks valid moves for the rook to the left
-    for (let c = col - 1; c >= 0; c--) {
-      if (boardState[row][c] === ' ') {
-        validPositions.push({ row, col: c });
-      } else if (boardState[row][c].toUpperCase() === 'B') {
-        validPositions.push({ row, col: c });
-        break; // stops if there's an opponent's piece blocking the path
-      } else {
-        break; // stops if there's a friendly piece blocking the path
-      }
-      console.log('Valid move positions for rook:', validPositions);
+  }
 
+  // checks valid moves for the rook in the downward direction
+  for (let r = row + 1; r < 8; r++) {
+    if (boardState[r][col] === ' ') {
+      validPositions.push({ row: r, col });
+    } else if (/[bnkqpr]/.test(boardState[r][col])) {
+      validPositions.push({ row: r, col });
+      break; // Stop the loop when you encounter a piece
+    } else {
+      break;
     }
+  }
+
+  // checks valid moves for the rook to the right
+  for (let c = col + 1; c < 8; c++) {
+    if (boardState[row][c] === ' ') {
+      validPositions.push({ row, col: c });
+    } else if (/[bnkqpr]/.test(boardState[row][c])) {
+      validPositions.push({ row, col: c });
+      break; // Stop the loop when you encounter a piece
+    } else {
+      break;
+    }
+  }
+
+  // checks valid moves for the rook to the left
+  for (let c = col - 1; c >= 0; c--) {
+    if (boardState[row][c] === ' ') {
+      validPositions.push({ row, col: c });
+    } else if (/[bnkqpr]/.test(boardState[row][c])) {
+      validPositions.push({ row, col: c });
+      break; // Stop the loop when you encounter a piece
+    } else {
+      break;
+    }
+    
+  }
+    console.log('Valid move positions for rook:', validPositions);
 
   } else if (piece === 'r' && currentPlayer === 'Black') {
-    // checks valid moves for the rook in the upward direction
-    for (let r = row - 1; r >= 0; r--) {
-      if (boardState[r][col] === ' ') {
-        validPositions.push({ row: r, col });
-      } else if (boardState[r][col].toUpperCase() === 'W') {
-        validPositions.push({ row: r, col });
-        break; // stops if there's an opponent's piece blocking the path
-      } else {
-        break; // stops if there's a friendly piece blocking the path
-      }
+  // checks valid moves for the rook in the upward direction
+  for (let r = row - 1; r >= 0; r--) {
+    if (boardState[r][col] === ' ') {
+      validPositions.push({ row: r, col });
+    } else if (/[BNKQPR]/.test(boardState[r][col])) {
+      validPositions.push({ row: r, col });
+      break; // Stop the loop when you encounter a piece
+    } else {
+      break;
     }
-  
-    // checks valid moves for the rook in the downward direction
-    for (let r = row + 1; r < 8; r++) {
-      if (boardState[r][col] === ' ') {
-        validPositions.push({ row: r, col });
-      } else if (boardState[r][col].toUpperCase() === 'W') {
-        validPositions.push({ row: r, col });
-        break; // stops if there's an opponent's piece blocking the path
-      } else {
-        break; // stops if there's a friendly piece blocking the path
-      }
+  }
+
+  // checks valid moves for the rook in the downward direction
+  for (let r = row + 1; r < 8; r++) {
+    if (boardState[r][col] === ' ') {
+      validPositions.push({ row: r, col });
+    } else if (/[BNKQPR]/.test(boardState[r][col])) {
+      validPositions.push({ row: r, col });
+      break; // Stop the loop when you encounter a piece
+    } else {
+      break;
     }
-  
-    // checks valid moves for the rook to the right
-    for (let c = col + 1; c < 8; c++) {
-      if (boardState[row][c] === ' ') {
-        validPositions.push({ row, col: c });
-      } else if (boardState[row][c].toUpperCase() === 'W') {
-        validPositions.push({ row, col: c });
-        break; // stops if there's an opponent's piece blocking the path
-      } else {
-        break; // stops if there's a friendly piece blocking the path
-      }
+  }
+
+  // checks valid moves for the rook to the right
+  for (let c = col + 1; c < 8; c++) {
+    if (boardState[row][c] === ' ') {
+      validPositions.push({ row, col: c });
+    } else if (/[BNKQPR]/.test(boardState[row][c])) {
+      validPositions.push({ row, col: c });
+      break; // Stop the loop when you encounter a piece
+    } else {
+      break;
     }
-  
-    // checks valid moves for the rook to the left
-    for (let c = col - 1; c >= 0; c--) {
-      if (boardState[row][c] === ' ') {
-        validPositions.push({ row, col: c });
-      } else if (boardState[row][c].toUpperCase() === 'W') {
-        validPositions.push({ row, col: c });
-        break; // stops if there's an opponent's piece blocking the path
-      } else {
-        break; // stops if there's a friendly piece blocking the path
-      }
+  }
+
+  // checks valid moves for the rook to the left
+  for (let c = col - 1; c >= 0; c--) {
+    if (boardState[row][c] === ' ') {
+      validPositions.push({ row, col: c });
+    } else if (/[BNKQPR]/.test(boardState[row][c])) {
+      validPositions.push({ row, col: c });
+      break; // Stop the loop when you encounter a piece
+    } else {
+      break;
     }
+    
+  }
     console.log('Valid move positions for rook:', validPositions);
 
   }
@@ -521,7 +522,7 @@ const updateValidMovePositions = (row, col) => {
     for (const move of knightMoves) {
       const { row: newRow, col: newCol } = move;
       if (newRow >= 0 && newRow < 8 && newCol >= 0 && newCol < 8) {
-        if (boardState[newRow][newCol] === ' ' || boardState[newRow][newCol].toUpperCase() === 'B') {
+        if (boardState[newRow][newCol] === ' ' || ['b', 'n', 'k', 'q', 'p', 'r'].includes(boardState[newRow][newCol])) {
           validPositions.push(move);
         }
       }
@@ -544,7 +545,7 @@ const updateValidMovePositions = (row, col) => {
     for (const move of knightMoves) {
       const { row: newRow, col: newCol } = move;
       if (newRow >= 0 && newRow < 8 && newCol >= 0 && newCol < 8) {
-        if (boardState[newRow][newCol] === ' ' || boardState[newRow][newCol].toUpperCase() === 'W') {
+        if (boardState[newRow][newCol] === ' ' || ['B', 'N', 'K', 'Q', 'P', 'R'].includes(boardState[newRow][newCol])) {
           validPositions.push(move);
         }
       }
@@ -916,38 +917,6 @@ const updateValidMovePositions = (row, col) => {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// function isKingInCheck(currentPlayer, boardState, updateValidMovePositions) {
-//   const opponentColor = (currentPlayer === 'White') ? 'Black' : 'White';
-//   const kingSymbol = (currentPlayer === 'White') ? 'K' : 'k';
-
-//   // Find the current position of the king
-//   let kingRow, kingCol;
-//   for (let row = 0; row < 8; row++) {
-//     for (let col = 0; col < 8; col++) {
-//       if (boardState[row][col] === kingSymbol) {
-//         kingRow = row;
-//         kingCol = col;
-//       }
-//     }
-//   }
-
-//   // Iterate over opponent's pieces
-//   for (let row = 0; row < 8; row++) {
-//     for (let col = 0; col < 8; col++) {
-//       if (boardState[row][col].toUpperCase() === opponentColor) {
-//         const piece = boardState[row][col];
-//         const validMoves = updateValidMovePositions(piece, row, col, boardState, currentPlayer);
-
-//         // Check if any of the valid moves can capture the king
-//         if (validMoves.some(move => move.row === kingRow && move.col === kingCol)) {
-//           return true; // King is in check
-//         }
-//       }
-//     }
-//   }
-
-//   return false; // King is not in check
-// }
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -990,6 +959,7 @@ const handleSquareClick = (row, col) => {
   } else {
     const piece = boardState[selectedPiece.row][selectedPiece.col];
     let isValidMove = false;
+                                             
 
     if (piece === 'P' || piece === 'p') {
       isValidMove = isPawnMoveValid(selectedPiece.row, selectedPiece.col, row, col, piece, currentPlayer);
@@ -1010,16 +980,65 @@ const handleSquareClick = (row, col) => {
       console.log('Piece moved successfully');
       setValidMovesForSelectedPiece([]);  //resets the valid moves for easy mode/check functions
       updateValidMovePositions(row, col); //offers the new valid moves to account for the check function that I need to make
-
+      if (isKingInCheck()) {
+        console.log('King is in check!');
+        showNotification('Check!');
+      }
       
     } else {
       showNotification('Invalid move for the selected piece.');
       console.log('Invalid move for the selected piece.');
+      setSelectedPiece(null);       //fixes the deselection bug
     }
     
 
   }
 };
+
+
+const isKingInCheck = () => {
+  // Find the position of the current player's king (e.g., 'K' for white or 'k' for black).
+  const kingSymbol = currentPlayer === 'White' ? 'K' : 'k';
+  let kingPosition = null;
+
+  // Find the king's position on the board.
+  for (let r = 0; r < 8; r++) {
+    for (let c = 0; c < 8; c++) {
+      if (boardState[r][c] === kingSymbol) {
+        kingPosition = { row: r, col: c };
+        break;
+      }
+    }
+  }
+
+  if (!kingPosition) {
+    // The king is not on the board; handle this as an error or game over.
+    return false;
+  }
+
+  // Use updateValidMovePositions to get the valid moves for the opponent's pieces.
+  const opponentPieces = currentPlayer === 'White' ? 'black' : 'wwhite';
+  const validMovesForOpponent = [];
+
+  for (let r = 0; r < 8; r++) {
+    for (let c = 0; c < 8; c++) {
+      if (boardState[r][c] === opponentPieces) {
+        updateValidMovePositions(r, c);
+        validMovesForOpponent.push(...validMovePositions);
+      }
+    }
+  }
+
+  // Check if any of the opponent's pieces can attack the king's position.
+  for (const move of validMovesForOpponent) {
+    if (move.row === kingPosition.row && move.col === kingPosition.col) {
+      return true; // The king is in check.
+    }
+  }
+
+  return false; // The king is not in check.
+};
+
 
 
 
