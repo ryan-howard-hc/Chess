@@ -364,12 +364,12 @@ const updateValidMovePositions = (row, col) => {
     }
   
     // checks if the pawn can capture diagonally to the right
-    if (col + 1 < 8 && row + 1 < 8 && boardState[row + 1][col + 1] !== ' ' && boardState[row + 1][col + 1].toUpperCase() === 'B') {
+    if (col + 1 < 8 && row + 1 < 8 && boardState[row + 1][col + 1] !== ' ' && ['B', 'N', 'K', 'Q', 'P', 'R'].includes(boardState[row][col])) {
       validPositions.push({ row: row + 1, col: col + 1 });
     }
   
     // checks if the pawn can capture diagonally to the left
-    if (col - 1 >= 0 && row + 1 < 8 && boardState[row + 1][col - 1] !== ' ' && boardState[row + 1][col - 1].toUpperCase() === 'B') {
+    if (col - 1 >= 0 && row + 1 < 8 && boardState[row + 1][col - 1] !== ' ' && ['B', 'N', 'K', 'Q', 'P', 'R'].includes(boardState[row][col])) {
       validPositions.push({ row: row + 1, col: col - 1 });
     }
     console.log('Valid move positions:', validPositions);
@@ -388,12 +388,12 @@ const updateValidMovePositions = (row, col) => {
     }
   
     // checks if the pawn can capture diagonally to the right
-    if (col + 1 < 8 && row - 1 >= 0 && boardState[row - 1][col + 1] !== ' ' && boardState[row - 1][col + 1].toUpperCase() === 'W') {
+    if (col + 1 < 8 && row - 1 >= 0 && boardState[row - 1][col + 1] !== ' ' && ['b', 'n', 'k', 'q', 'p', 'r'].includes(boardState[row][col])) {
       validPositions.push({ row: row - 1, col: col + 1 });
     }
   
     // checks if the pawn can capture diagonally to the left
-    if (col - 1 >= 0 && row - 1 >= 0 && boardState[row - 1][col - 1] !== ' ' && boardState[row - 1][col - 1].toUpperCase() === 'W') {
+    if (col - 1 >= 0 && row - 1 >= 0 && boardState[row - 1][col - 1] !== ' ' && ['b', 'n', 'k', 'q', 'p', 'r'].includes(boardState[row][col])) {
       validPositions.push({ row: row - 1, col: col - 1 });
     }
   
@@ -561,7 +561,7 @@ const updateValidMovePositions = (row, col) => {
     for (let r = row - 1, c = col + 1; r >= 0 && c < 8; r--, c++) {
       if (boardState[r][c] === ' ') {
         validPositions.push({ row: r, col: c });
-      } else if (boardState[r][c].toUpperCase() === 'B') {
+      } else if (['b', 'n', 'k', 'q', 'p', 'r'].includes(boardState[r][c])) {
         validPositions.push({ row: r, col: c });
         break; // stops if there's an opponent's piece blocking the path
       } else {
@@ -573,7 +573,7 @@ const updateValidMovePositions = (row, col) => {
     for (let r = row - 1, c = col - 1; r >= 0 && c >= 0; r--, c--) {
       if (boardState[r][c] === ' ') {
         validPositions.push({ row: r, col: c });
-      } else if (boardState[r][c].toUpperCase() === 'B') {
+      } else if (['b', 'n', 'k', 'q', 'p', 'r'].includes(boardState[r][c])) {
         validPositions.push({ row: r, col: c });
         break; // stops if there's an opponent's piece blocking the path
       } else {
@@ -585,7 +585,7 @@ const updateValidMovePositions = (row, col) => {
     for (let r = row + 1, c = col + 1; r < 8 && c < 8; r++, c++) {
       if (boardState[r][c] === ' ') {
         validPositions.push({ row: r, col: c });
-      } else if (boardState[r][c].toUpperCase() === 'B') {
+      } else if (['b', 'n', 'k', 'q', 'p', 'r'].includes(boardState[r][c])) {
         validPositions.push({ row: r, col: c });
         break; // stops if there's an opponent's piece blocking the path
       } else {
@@ -597,7 +597,7 @@ const updateValidMovePositions = (row, col) => {
     for (let r = row + 1, c = col - 1; r < 8 && c >= 0; r++, c--) {
       if (boardState[r][c] === ' ') {
         validPositions.push({ row: r, col: c });
-      } else if (boardState[r][c].toUpperCase() === 'B') {
+      } else if (['b', 'n', 'k', 'q', 'p', 'r'].includes(boardState[r][c])) {
         validPositions.push({ row: r, col: c });
         break; // stops if there's an opponent's piece blocking the path
       } else {
@@ -611,7 +611,7 @@ const updateValidMovePositions = (row, col) => {
     for (let r = row - 1, c = col + 1; r >= 0 && c < 8; r--, c++) {
       if (boardState[r][c] === ' ') {
         validPositions.push({ row: r, col: c });
-      } else if (boardState[r][c].toUpperCase() === 'W') {
+      } else if (['B', 'N', 'K', 'Q', 'P', 'R'].includes(boardState[r][c])) {
         validPositions.push({ row: r, col: c });
         break; // stops if there's an opponent's piece blocking the path
       } else {
@@ -623,7 +623,7 @@ const updateValidMovePositions = (row, col) => {
     for (let r = row - 1, c = col - 1; r >= 0 && c >= 0; r--, c--) {
       if (boardState[r][c] === ' ') {
         validPositions.push({ row: r, col: c });
-      } else if (boardState[r][c].toUpperCase() === 'W') {
+      } else if (['B', 'N', 'K', 'Q', 'P', 'R'].includes(boardState[r][c])) {
         validPositions.push({ row: r, col: c });
         break; // stops if there's an opponent's piece blocking the path
       } else {
@@ -635,7 +635,7 @@ const updateValidMovePositions = (row, col) => {
     for (let r = row + 1, c = col + 1; r < 8 && c < 8; r++, c++) {
       if (boardState[r][c] === ' ') {
         validPositions.push({ row: r, col: c });
-      } else if (boardState[r][c].toUpperCase() === 'W') {
+      } else if (['B', 'N', 'K', 'Q', 'P', 'R'].includes(boardState[r][c])) {
         validPositions.push({ row: r, col: c });
         break; // stops if there's an opponent's piece blocking the path
       } else {
@@ -647,7 +647,7 @@ const updateValidMovePositions = (row, col) => {
     for (let r = row + 1, c = col - 1; r < 8 && c >= 0; r++, c--) {
       if (boardState[r][c] === ' ') {
         validPositions.push({ row: r, col: c });
-      } else if (boardState[r][c].toUpperCase() === 'W') {
+      } else if (['B', 'N', 'K', 'Q', 'P', 'R'].includes(boardState[r][c])) {
         validPositions.push({ row: r, col: c });
         break; // stops if there's an opponent's piece blocking the path
       } else {
@@ -665,7 +665,7 @@ const updateValidMovePositions = (row, col) => {
     for (let c = col + 1; c < 8; c++) {
       if (boardState[row][c] === ' ') {
         validPositions.push({ row, col: c });
-      } else if (boardState[row][c].toUpperCase() === 'B') {
+      } else if (['b', 'n', 'k', 'q', 'p', 'r'].includes(boardState[row][c])) {
         validPositions.push({ row, col: c });
         break; // stops if there's an opponent's piece blocking the path
       } else {
@@ -677,7 +677,7 @@ const updateValidMovePositions = (row, col) => {
     for (let c = col - 1; c >= 0; c--) {
       if (boardState[row][c] === ' ') {
         validPositions.push({ row, col: c });
-      } else if (boardState[row][c].toUpperCase() === 'B') {
+      } else if (['b', 'n', 'k', 'q', 'p', 'r'].includes(boardState[row][c])) {
         validPositions.push({ row, col: c });
         break; // stops if there's an opponent's piece blocking the path
       } else {
@@ -701,7 +701,7 @@ const updateValidMovePositions = (row, col) => {
     for (let r = row + 1; r < 8; r++) {
       if (boardState[r][col] === ' ') {
         validPositions.push({ row: r, col });
-      } else if (boardState[r][col].toUpperCase() === 'B') {
+      } else if (['b', 'n', 'k', 'q', 'p', 'r'].includes(boardState[r][col])) {
         validPositions.push({ row: r, col });
         break; // stops if there's an opponent's piece blocking the path
       } else {
@@ -713,7 +713,7 @@ const updateValidMovePositions = (row, col) => {
     for (let r = row - 1, c = col + 1; r >= 0 && c < 8; r--, c++) {
       if (boardState[r][c] === ' ') {
         validPositions.push({ row: r, col: c });
-      } else if (boardState[r][c].toUpperCase() === 'B') {
+      } else if (['b', 'n', 'k', 'q', 'p', 'r'].includes(boardState[r][c])) {
         validPositions.push({ row: r, col: c });
         break; // stops if there's an opponent's piece blocking the path
       } else {
@@ -725,7 +725,7 @@ const updateValidMovePositions = (row, col) => {
     for (let r = row - 1, c = col - 1; r >= 0 && c >= 0; r--, c--) {
       if (boardState[r][c] === ' ') {
         validPositions.push({ row: r, col: c });
-      } else if (boardState[r][c].toUpperCase() === 'B') {
+      } else if (['b', 'n', 'k', 'q', 'p', 'r'].includes(boardState[r][c])) {
         validPositions.push({ row: r, col: c });
         break; // stops if there's an opponent's piece blocking the path
       } else {
@@ -737,7 +737,7 @@ const updateValidMovePositions = (row, col) => {
     for (let r = row + 1, c = col + 1; r < 8 && c < 8; r++, c++) {
       if (boardState[r][c] === ' ') {
         validPositions.push({ row: r, col: c });
-      } else if (boardState[r][c].toUpperCase() === 'B') {
+      } else if (['b', 'n', 'k', 'q', 'p', 'r'].includes(boardState[r][c])) {
         validPositions.push({ row: r, col: c });
         break; // stops if there's an opponent's piece blocking the path
       } else {
@@ -749,7 +749,7 @@ const updateValidMovePositions = (row, col) => {
     for (let r = row + 1, c = col - 1; r < 8 && c >= 0; r++, c--) {
       if (boardState[r][c] === ' ') {
         validPositions.push({ row: r, col: c });
-      } else if (boardState[r][c].toUpperCase() === 'B') {
+      } else if (['b', 'n', 'k', 'q', 'p', 'r'].includes(boardState[r][c])) {
         validPositions.push({ row: r, col: c });
         break; // stops if there's an opponent's piece blocking the path
       } else {
@@ -763,7 +763,7 @@ const updateValidMovePositions = (row, col) => {
     for (let c = col + 1; c < 8; c++) {
       if (boardState[row][c] === ' ') {
         validPositions.push({ row, col: c });
-      } else if (boardState[row][c].toUpperCase() === 'W') {
+      } else if (['B', 'N', 'K', 'Q', 'P', 'R'].includes(boardState[row][c])) {
         validPositions.push({ row, col: c });
         break; // stops if there's an opponent's piece blocking the path
       } else {
@@ -775,7 +775,7 @@ const updateValidMovePositions = (row, col) => {
     for (let c = col - 1; c >= 0; c--) {
       if (boardState[row][c] === ' ') {
         validPositions.push({ row, col: c });
-      } else if (boardState[row][c].toUpperCase() === 'W') {
+      } else if (['B', 'N', 'K', 'Q', 'P', 'R'].includes(boardState[row][c])) {
         validPositions.push({ row, col: c });
         break; // stops if there's an opponent's piece blocking the path
       } else {
@@ -787,7 +787,7 @@ const updateValidMovePositions = (row, col) => {
     for (let r = row - 1; r >= 0; r--) {
       if (boardState[r][col] === ' ') {
         validPositions.push({ row: r, col });
-      } else if (boardState[r][col].toUpperCase() === 'W') {
+      } else if (['B', 'N', 'K', 'Q', 'P', 'R'].includes(boardState[r][col])) {
         validPositions.push({ row: r, col });
         break; // stops if there's an opponent's piece blocking the path
       } else {
@@ -799,7 +799,7 @@ const updateValidMovePositions = (row, col) => {
     for (let r = row + 1; r < 8; r++) {
       if (boardState[r][col] === ' ') {
         validPositions.push({ row: r, col });
-      } else if (boardState[r][col].toUpperCase() === 'W') {
+      } else if (['B', 'N', 'K', 'Q', 'P', 'R'].includes(boardState[r][col])) {
         validPositions.push({ row: r, col });
         break; // stops if there's an opponent's piece blocking the path
       } else {
@@ -811,7 +811,7 @@ const updateValidMovePositions = (row, col) => {
     for (let r = row - 1, c = col + 1; r >= 0 && c < 8; r--, c++) {
       if (boardState[r][c] === ' ') {
         validPositions.push({ row: r, col: c });
-      } else if (boardState[r][c].toUpperCase() === 'W') {
+      } else if (['B', 'N', 'K', 'Q', 'P', 'R'].includes(boardState[r][c])) {
         validPositions.push({ row: r, col: c });
         break; // stops if there's an opponent's piece blocking the path
       } else {
@@ -823,7 +823,7 @@ const updateValidMovePositions = (row, col) => {
     for (let r = row - 1, c = col - 1; r >= 0 && c >= 0; r--, c--) {
       if (boardState[r][c] === ' ') {
         validPositions.push({ row: r, col: c });
-      } else if (boardState[r][c].toUpperCase() === 'W') {
+      } else if (['B', 'N', 'K', 'Q', 'P', 'R'].includes(boardState[r][c])) {
         validPositions.push({ row: r, col: c });
         break; // stops if there's an opponent's piece blocking the path
       } else {
@@ -835,7 +835,7 @@ const updateValidMovePositions = (row, col) => {
     for (let r = row + 1, c = col + 1; r < 8 && c < 8; r++, c++) {
       if (boardState[r][c] === ' ') {
         validPositions.push({ row: r, col: c });
-      } else if (boardState[r][c].toUpperCase() === 'W') {
+      } else if (['B', 'N', 'K', 'Q', 'P', 'R'].includes(boardState[r][c])) {
         validPositions.push({ row: r, col: c });
         break; // stops if there's an opponent's piece blocking the path
       } else {
@@ -847,7 +847,7 @@ const updateValidMovePositions = (row, col) => {
     for (let r = row + 1, c = col - 1; r < 8 && c >= 0; r++, c--) {
       if (boardState[r][c] === ' ') {
         validPositions.push({ row: r, col: c });
-      } else if (boardState[r][c].toUpperCase() === 'W') {
+      } else if (['B', 'N', 'K', 'Q', 'P', 'R'].includes(boardState[r][c])) {
         validPositions.push({ row: r, col: c });
         break; // stops if there's an opponent's piece blocking the path
       } else {
@@ -877,7 +877,7 @@ const updateValidMovePositions = (row, col) => {
       const newCol = col + direction.col;
   
       if (newRow >= 0 && newRow < 8 && newCol >= 0 && newCol < 8) {
-        if (boardState[newRow][newCol] === ' ' || boardState[newRow][newCol].toUpperCase() === 'B') {
+        if (boardState[newRow][newCol] === ' ' || ['b', 'n', 'k', 'q', 'p', 'r'].includes(boardState[newRow][newCol])) {
           validPositions.push({ row: newRow, col: newCol });
         }
       }
@@ -902,7 +902,7 @@ const updateValidMovePositions = (row, col) => {
       const newCol = col + direction.col;
   
       if (newRow >= 0 && newRow < 8 && newCol >= 0 && newCol < 8) {
-        if (boardState[newRow][newCol] === ' ' || boardState[newRow][newCol].toUpperCase() === 'W') {
+        if (boardState[newRow][newCol] === ' ' || ['B', 'N', 'K', 'Q', 'P', 'R'].includes(boardState[newRow][newCol])) {
           validPositions.push({ row: newRow, col: newCol });
         }
       }
