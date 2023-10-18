@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button } from 'react-bootstrap';
-
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../src/css/chessboard.css';
 import PlayerTurn from './07playerturns';
 import ChessPiece from './01chesspiece';
 import EasyModeToggle from './02easymode';
 import TakenPieces from './03takenpieces';
-
 
 const Chessboard = () => {
   // const [gameOver, setGameOver] = useState(false);
@@ -91,9 +89,6 @@ const movePiece = (fromRow, fromCol, toRow, toCol) => {    // function takes the
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
 const isPawnMoveValid = (fromRow, fromCol, toRow, toCol, piece, currentPlayer) => {
   const direction = currentPlayer === 'White' ? 1 : -1;
   const startingRow = currentPlayer === 'White' ? 1 : 6;
@@ -135,8 +130,6 @@ const isPawnMoveValid = (fromRow, fromCol, toRow, toCol, piece, currentPlayer) =
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
 const isRookMoveValid = (fromRow, fromCol, toRow, toCol, piece, currentPlayer) => { 
   
   if ((piece === 'r' && currentPlayer === 'White') || (piece === 'R' && currentPlayer === 'Black')) {
@@ -177,9 +170,6 @@ const isRookMoveValid = (fromRow, fromCol, toRow, toCol, piece, currentPlayer) =
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
 const isKnightMoveValid = (fromRow, fromCol, toRow, toCol, piece, currentPlayer) => {
   const dx = Math.abs(toCol - fromCol);
   const dy = Math.abs(toRow - fromRow);
@@ -208,9 +198,6 @@ const isKnightMoveValid = (fromRow, fromCol, toRow, toCol, piece, currentPlayer)
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
 const isBishopMoveValid = (fromRow, fromCol, toRow, toCol, piece, currentPlayer) => {
   const dx = Math.abs(toCol - fromCol);
   const dy = Math.abs(toRow - fromRow);
@@ -252,9 +239,6 @@ const isBishopMoveValid = (fromRow, fromCol, toRow, toCol, piece, currentPlayer)
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
 const isQueenMoveValid = (fromRow, fromCol, toRow, toCol, piece, currentPlayer) => {
   const dx = Math.abs(toCol - fromCol);
   const dy = Math.abs(toRow - fromRow);
@@ -317,11 +301,7 @@ const isQueenMoveValid = (fromRow, fromCol, toRow, toCol, piece, currentPlayer) 
   return false;
 };
 
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
 const isKingMoveValid = (fromRow, fromCol, toRow, toCol, piece, currentPlayer) => {
   const dx = Math.abs(toCol - fromCol);
   const dy = Math.abs(toRow - fromRow);
@@ -347,20 +327,15 @@ const isKingMoveValid = (fromRow, fromCol, toRow, toCol, piece, currentPlayer) =
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-const [showAlert, setShowAlert] = useState(false);
-
 const [notification, setNotification] = useState({ message: '', visible: false });
 
 const showNotification = (message) => {
   setNotification({ message, visible: true });
 
-  if (message === 'check') {
-    setTimeout(() => {
-      setNotification({ message: '', visible: false });
-    }, 3000);
-  }
+  setTimeout(() => {
+    setNotification({ message: '', visible: false });
+  }, 3000);
 };
-
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 const updateValidMovePositions = (row, col) => {
@@ -1128,7 +1103,6 @@ const handleSquareClick = (row, col) => {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////  
 
-
 const board = [];
 
 
@@ -1185,9 +1159,9 @@ return (
       <div className="row col-12 col-md-12">
         
 
-        <div className="col-12 col-md-12 chessboard-column offset-md-3" >
+        <div className="col-12 col-md-6 chessboard-column offset-md-3" >
 
-        <div className="chessboard">
+<div className="chessboard">
   {board}
 </div>
           
@@ -1195,11 +1169,9 @@ return (
         <div className={`flash-alert${notification.visible ? ' visible' : ''}`}>
   {notification.message}
 </div>
-        <div className="col-12 col-md-2 offset-md-1">
-          <div className="taken-pieces">
+          <div className="taken-pieces col-12 col-md-2 offset-md-1">
           <TakenPieces takenPieces={takenPieces} pieceDesign={pieceDesign} />
           </div>
-        </div>
 
       </div>
     </div>
