@@ -364,13 +364,24 @@ const updateValidMovePositions = (row, col) => {
     }
   
     // checks if the pawn can capture diagonally to the right
-    if (col + 1 < 8 && row + 1 < 8 && boardState[row + 1][col + 1] !== ' ' && ['B', 'N', 'K', 'Q', 'P', 'R'].includes(boardState[row][col])) {
-      validPositions.push({ row: row + 1, col: col + 1 });
+    if (col + 1 < 8 && row + 1 < 8) {
+      if (boardState[row + 1][col + 1] !== ' ' && ['B', 'N', 'Q', 'P', 'R'].includes(boardState[row][col])) {
+        if (boardState[row + 1][col + 1] === 'k') {
+          alert('Check!');
+          // Handle the logic for capturing the opponent's king here.
+        }
+        validPositions.push({ row: row + 1, col: col + 1 });
+      }
     }
-  
-    // checks if the pawn can capture diagonally to the left
-    if (col - 1 >= 0 && row + 1 < 8 && boardState[row + 1][col - 1] !== ' ' && ['B', 'N', 'K', 'Q', 'P', 'R'].includes(boardState[row][col])) {
-      validPositions.push({ row: row + 1, col: col - 1 });
+    
+    if (col - 1 >= 0 && row + 1 < 8) {
+      if (boardState[row + 1][col - 1] !== ' ' && ['B', 'N', 'Q', 'P', 'R'].includes(boardState[row][col])) {
+        if (boardState[row + 1][col - 1] === 'k') {
+          alert('Check!');
+          // Handle the logic for capturing the opponent's king here.
+        }
+        validPositions.push({ row: row + 1, col: col - 1 });
+      }
     }
     console.log('Valid move positions:', validPositions);
 
@@ -980,10 +991,10 @@ const handleSquareClick = (row, col) => {
       console.log('Piece moved successfully');
       setValidMovesForSelectedPiece([]);  //resets the valid moves for easy mode/check functions
       updateValidMovePositions(row, col); //offers the new valid moves to account for the check function that I need to make
-      if (isKingInCheck()) {
-        console.log('King is in check!');
-        showNotification('Check!');
-      }
+      // if (isKingInCheck()) {
+      //   console.log('King is in check!');
+      //   showNotification('Check!');
+      // }
       
     } else {
       showNotification('Invalid move for the selected piece.');
@@ -994,51 +1005,6 @@ const handleSquareClick = (row, col) => {
 
   }
 };
-
-
-const isKingInCheck = () => {
-  // Find the position of the current player's king (e.g., 'K' for white or 'k' for black).
-  const kingSymbol = currentPlayer === 'White' ? 'K' : 'k';
-  let kingPosition = null;
-
-  // Find the king's position on the board.
-  for (let r = 0; r < 8; r++) {
-    for (let c = 0; c < 8; c++) {
-      if (boardState[r][c] === kingSymbol) {
-        kingPosition = { row: r, col: c };
-        break;
-      }
-    }
-  }
-
-  if (!kingPosition) {
-    // The king is not on the board; handle this as an error or game over.
-    return false;
-  }
-
-  // Use updateValidMovePositions to get the valid moves for the opponent's pieces.
-  const opponentPieces = currentPlayer === 'White' ? 'black' : 'wwhite';
-  const validMovesForOpponent = [];
-
-  for (let r = 0; r < 8; r++) {
-    for (let c = 0; c < 8; c++) {
-      if (boardState[r][c] === opponentPieces) {
-        updateValidMovePositions(r, c);
-        validMovesForOpponent.push(...validMovePositions);
-      }
-    }
-  }
-
-  // Check if any of the opponent's pieces can attack the king's position.
-  for (const move of validMovesForOpponent) {
-    if (move.row === kingPosition.row && move.col === kingPosition.col) {
-      return true; // The king is in check.
-    }
-  }
-
-  return false; // The king is not in check.
-};
-
 
 
 
@@ -1152,3 +1118,48 @@ export default Chessboard;
   //     setGameOverAlert(false);
   //   }, 3000);
   // }
+
+
+  
+// const isKingInCheck = () => {
+//   // Find the position of the current player's king (e.g., 'K' for white or 'k' for black).
+//   const kingSymbol = currentPlayer === 'White' ? 'K' : 'k';
+//   let kingPosition = null;
+
+//   // Find the king's position on the board.
+//   for (let r = 0; r < 8; r++) {
+//     for (let c = 0; c < 8; c++) {
+//       if (boardState[r][c] === kingSymbol) {
+//         kingPosition = { row: r, col: c };
+//         break;
+//       }
+//     }
+//   }
+
+//   if (!kingPosition) {
+//     // The king is not on the board; handle this as an error or game over.
+//     return false;
+//   }
+
+//   // Use updateValidMovePositions to get the valid moves for the opponent's pieces.
+//   const opponentPieces = currentPlayer === 'White' ? 'black' : 'wwhite';
+//   const validMovesForOpponent = [];
+
+//   for (let r = 0; r < 8; r++) {
+//     for (let c = 0; c < 8; c++) {
+//       if (boardState[r][c] === opponentPieces) {
+//         updateValidMovePositions(r, c);
+//         validMovesForOpponent.push(...validMovePositions);
+//       }
+//     }
+//   }
+
+//   // Check if any of the opponent's pieces can attack the king's position.
+//   for (const move of validMovesForOpponent) {
+//     if (move.row === kingPosition.row && move.col === kingPosition.col) {
+//       return true; // The king is in check.
+//     }
+//   }
+
+//   return false; // The king is not in check.
+// };
