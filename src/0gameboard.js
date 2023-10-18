@@ -33,7 +33,7 @@ const initialBoardState = [
 ];
 
 const [currentPlayer, setCurrentPlayer] = useState('White');
-const [validMovePositions, setValidMovePositions] = useState([]);
+// const [validMovePositions, setValidMovePositions] = useState([]);
 
 const [boardState, setBoardState] = useState(initialBoardState);
 const [selectedPiece, setSelectedPiece] = useState(null);
@@ -386,6 +386,8 @@ const updateValidMovePositions = (row, col) => {
   } else if (piece === 'p' && currentPlayer === 'Black') {
 
 
+
+
     // checks if the pawn can move one square forward
     if (row - 1 >= 0 && boardState[row - 1][col] === ' ') {
       validPositions.push({ row: row - 1, col });
@@ -419,6 +421,8 @@ const updateValidMovePositions = (row, col) => {
   
   console.log('Valid move positions:', validPositions);
   
+
+
 
 
 }else if (piece === 'R' && currentPlayer === 'White') {
@@ -603,7 +607,10 @@ const updateValidMovePositions = (row, col) => {
         validPositions.push({ row: r, col: c });
       } else if (['b', 'n', 'k', 'q', 'p', 'r'].includes(boardState[r][c])) {
         validPositions.push({ row: r, col: c });
-        break; // stops if there's an opponent's piece blocking the path
+        if (boardState[r][c] === 'k') {
+          alert("checks!"); 
+        }
+        break; // stops if there's an opponent's piece or a friendly piece
       } else {
         break; // stops if there's a friendly piece blocking the path
       }
@@ -615,7 +622,10 @@ const updateValidMovePositions = (row, col) => {
         validPositions.push({ row: r, col: c });
       } else if (['b', 'n', 'k', 'q', 'p', 'r'].includes(boardState[r][c])) {
         validPositions.push({ row: r, col: c });
-        break; // stops if there's an opponent's piece blocking the path
+        if (boardState[r][c] === 'k') {
+          alert("checks!"); 
+        }
+        break; // stops if there's an opponent's piece or a friendly piece
       } else {
         break; // stops if there's a friendly piece blocking the path
       }
@@ -627,7 +637,10 @@ const updateValidMovePositions = (row, col) => {
         validPositions.push({ row: r, col: c });
       } else if (['b', 'n', 'k', 'q', 'p', 'r'].includes(boardState[r][c])) {
         validPositions.push({ row: r, col: c });
-        break; // stops if there's an opponent's piece blocking the path
+        if (boardState[r][c] === 'k') {
+          alert("checks!"); 
+        }
+        break; // stops if there's an opponent's piece or a friendly piece
       } else {
         break; // stops if there's a friendly piece blocking the path
       }
@@ -639,21 +652,27 @@ const updateValidMovePositions = (row, col) => {
         validPositions.push({ row: r, col: c });
       } else if (['b', 'n', 'k', 'q', 'p', 'r'].includes(boardState[r][c])) {
         validPositions.push({ row: r, col: c });
-        break; // stops if there's an opponent's piece blocking the path
+        if (boardState[r][c] === 'k') {
+          alert("checks!"); 
+        }
+        break; // stops if there's an opponent's piece or a friendly piece
       } else {
         break; // stops if there's a friendly piece blocking the path
       }
     }
     console.log('Valid move positions for bishop:', validPositions);
-
-  } else if (piece === 'b' && currentPlayer === 'Black') {
+  }
+  else if (piece === 'b' && currentPlayer === 'Black') {
     // checks valid moves for the bishop diagonally to the upper right
     for (let r = row - 1, c = col + 1; r >= 0 && c < 8; r--, c++) {
       if (boardState[r][c] === ' ') {
         validPositions.push({ row: r, col: c });
       } else if (['B', 'N', 'K', 'Q', 'P', 'R'].includes(boardState[r][c])) {
         validPositions.push({ row: r, col: c });
-        break; // stops if there's an opponent's piece blocking the path
+        if (boardState[r][c] === 'K') {
+          alert("checks!"); 
+        }
+        break; // stops if there's an opponent's piece or a friendly piece
       } else {
         break; // stops if there's a friendly piece blocking the path
       }
@@ -665,7 +684,10 @@ const updateValidMovePositions = (row, col) => {
         validPositions.push({ row: r, col: c });
       } else if (['B', 'N', 'K', 'Q', 'P', 'R'].includes(boardState[r][c])) {
         validPositions.push({ row: r, col: c });
-        break; // stops if there's an opponent's piece blocking the path
+        if (boardState[r][c] === 'K') {
+          alert("checks!"); 
+        }
+        break; // stops if there's an opponent's piece or a friendly piece
       } else {
         break; // stops if there's a friendly piece blocking the path
       }
@@ -677,7 +699,10 @@ const updateValidMovePositions = (row, col) => {
         validPositions.push({ row: r, col: c });
       } else if (['B', 'N', 'K', 'Q', 'P', 'R'].includes(boardState[r][c])) {
         validPositions.push({ row: r, col: c });
-        break; // stops if there's an opponent's piece blocking the path
+        if (boardState[r][c] === 'K') {
+          alert("checks!"); 
+        }
+        break; // stops if there's an opponent's piece or a friendly piece
       } else {
         break; // stops if there's a friendly piece blocking the path
       }
@@ -689,13 +714,15 @@ const updateValidMovePositions = (row, col) => {
         validPositions.push({ row: r, col: c });
       } else if (['B', 'N', 'K', 'Q', 'P', 'R'].includes(boardState[r][c])) {
         validPositions.push({ row: r, col: c });
-        break; // stops if there's an opponent's piece blocking the path
+        if (boardState[r][c] === 'K') {
+          alert("checks!"); 
+        }
+        break; // stops if there's an opponent's piece or a friendly piece
       } else {
         break; // stops if there's a friendly piece blocking the path
       }
     }
     console.log('Valid move positions for bishop:', validPositions);
-
   }
   
 
@@ -961,14 +988,16 @@ const updateValidMovePositions = (row, col) => {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-const [showModal, setShowModal] = useState(false);
-const openModal = () => {
-  setShowModal(true);
-};
+// const [showModal, setShowModal] = useState(false);
+// const openModal = () => {
+//   setShowModal(true);
+// };
 
-const closeModal = () => {
-  setShowModal(false);
-};
+// const closeModal = () => {
+//   setShowModal(false);
+// };
+
+
 const [showAlert, setShowAlert] = useState(false);
 
 const showNotification = (message) => {
