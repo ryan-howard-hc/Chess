@@ -11,9 +11,9 @@ import TakenPieces from './03takenpieces';
 
 const Chessboard = () => {
   // const [gameOver, setGameOver] = useState(false);
-  // const [checkmateMessage, setCheckmateMessage] = useState('');
+  // const [checkmateMessage, setchecksmateMessage] = useState('');
   // const [gameOverAlert, setGameOverAlert] = useState(false);
-  const [checkNotification, setCheckNotification] = useState(false);
+  const [checkNotification, setchecksNotification] = useState(false);
 
 
 const [easyMode, setEasyMode] = useState(false);   //sets initial state for my easy mode component to be turned off
@@ -367,7 +367,7 @@ const updateValidMovePositions = (row, col) => {
     if (col + 1 < 8 && row + 1 < 8) {
       if (boardState[row + 1][col + 1] !== ' ' && ['B', 'N', 'Q', 'P', 'R'].includes(boardState[row][col])) {
         if (boardState[row + 1][col + 1] === 'k') {
-          alert('Check!');
+          alert('checks!');
         }
         validPositions.push({ row: row + 1, col: col + 1 });
       }
@@ -376,7 +376,7 @@ const updateValidMovePositions = (row, col) => {
     if (col - 1 >= 0 && row + 1 < 8) {
       if (boardState[row + 1][col - 1] !== ' ' && ['B', 'N', 'Q', 'P', 'R'].includes(boardState[row][col])) {
         if (boardState[row + 1][col - 1] === 'k') {
-          alert('Check!');
+          alert('checks!');
         }
         validPositions.push({ row: row + 1, col: col - 1 });
       }
@@ -400,7 +400,7 @@ const updateValidMovePositions = (row, col) => {
     if (col + 1 < 8 && row - 1 >= 0) {
       if (boardState[row - 1][col + 1] !== ' ' && ['b', 'n', 'q', 'p', 'r'].includes(boardState[row][col])) {
         if (boardState[row - 1][col + 1] === 'K') {
-          alert('Check!');
+          alert('checks!');
         }
         validPositions.push({ row: row - 1, col: col + 1 });
       }
@@ -410,7 +410,7 @@ const updateValidMovePositions = (row, col) => {
     if (col - 1 >= 0 && row - 1 >= 0) {
       if (boardState[row - 1][col - 1] !== ' ' && ['b', 'n', 'q', 'p', 'r'].includes(boardState[row][col])) {
         if (boardState[row - 1][col - 1] === 'K') {
-          alert('Check!');
+          alert('checks!');
         }
         validPositions.push({ row: row - 1, col: col - 1 });
       }
@@ -428,7 +428,10 @@ const updateValidMovePositions = (row, col) => {
       validPositions.push({ row: r, col });
     } else if (/[bnkqpr]/.test(boardState[r][col])) {
       validPositions.push({ row: r, col });
-      break; // Stop the loop when you encounter a piece
+      if (boardState[r][col] === 'k') {
+        alert("checks!"); 
+      }
+      break; // stops the loop when you encounter a piece
     } else {
       break;
     }
@@ -440,7 +443,10 @@ const updateValidMovePositions = (row, col) => {
       validPositions.push({ row: r, col });
     } else if (/[bnkqpr]/.test(boardState[r][col])) {
       validPositions.push({ row: r, col });
-      break; // Stop the loop when you encounter a piece
+      if (boardState[r][col] === 'k') {
+        alert("checks!"); 
+      }
+      break; // stops the loop when you encounter a piece
     } else {
       break;
     }
@@ -452,7 +458,10 @@ const updateValidMovePositions = (row, col) => {
       validPositions.push({ row, col: c });
     } else if (/[bnkqpr]/.test(boardState[row][c])) {
       validPositions.push({ row, col: c });
-      break; // Stop the loop when you encounter a piece
+      if (boardState[row][c] === 'k') {
+        alert("checks!");
+      }
+      break; // stops the loop when you encounter a piece
     } else {
       break;
     }
@@ -464,22 +473,26 @@ const updateValidMovePositions = (row, col) => {
       validPositions.push({ row, col: c });
     } else if (/[bnkqpr]/.test(boardState[row][c])) {
       validPositions.push({ row, col: c });
-      break; // Stop the loop when you encounter a piece
+      if (boardState[row][c] === 'k') {
+        alert("checks!"); 
+      }
+      break; // stops the loop when you encounter a piece
     } else {
       break;
     }
-    
   }
-    console.log('Valid move positions for rook:', validPositions);
-
-  } else if (piece === 'r' && currentPlayer === 'Black') {
+  console.log('Valid move positions for rook:', validPositions);
+}else if (piece === 'r' && currentPlayer === 'Black') {
   // checks valid moves for the rook in the upward direction
   for (let r = row - 1; r >= 0; r--) {
     if (boardState[r][col] === ' ') {
       validPositions.push({ row: r, col });
     } else if (/[BNKQPR]/.test(boardState[r][col])) {
       validPositions.push({ row: r, col });
-      break; // Stop the loop when you encounter a piece
+      if (boardState[r][col] === 'K') {
+        alert("Opponent's king is in check!"); 
+      }
+      break; // stops the loop when you encounter a piece
     } else {
       break;
     }
@@ -491,7 +504,10 @@ const updateValidMovePositions = (row, col) => {
       validPositions.push({ row: r, col });
     } else if (/[BNKQPR]/.test(boardState[r][col])) {
       validPositions.push({ row: r, col });
-      break; // Stop the loop when you encounter a piece
+      if (boardState[r][col] === 'K') {
+        alert("Opponent's king is in check!"); 
+      }
+      break; // stops the loop when you encounter a piece
     } else {
       break;
     }
@@ -503,7 +519,10 @@ const updateValidMovePositions = (row, col) => {
       validPositions.push({ row, col: c });
     } else if (/[BNKQPR]/.test(boardState[row][c])) {
       validPositions.push({ row, col: c });
-      break; // Stop the loop when you encounter a piece
+      if (boardState[row][c] === 'K') {
+        alert("Opponent's king is in check!"); 
+      }
+      break; // stops the loop when you encounter a piece
     } else {
       break;
     }
@@ -515,15 +534,17 @@ const updateValidMovePositions = (row, col) => {
       validPositions.push({ row, col: c });
     } else if (/[BNKQPR]/.test(boardState[row][c])) {
       validPositions.push({ row, col: c });
-      break; // Stop the loop when you encounter a piece
+      if (boardState[row][c] === 'K') {
+        alert("Opponent's king is in check!"); 
+      }
+      break; // stops the loop when you encounter a piece
     } else {
       break;
     }
-    
   }
-    console.log('Valid move positions for rook:', validPositions);
+  console.log('Valid move positions for rook:', validPositions);
+}
 
-  }
   
 
   else if (piece === 'N' && currentPlayer === 'White') {
@@ -960,7 +981,7 @@ const showNotification = (message) => {
 // useEffect(() => {
 //   if (checkNotification) {
 //     const notificationTimeout = setTimeout(() => {
-//       setCheckNotification(false);
+//       setchecksNotification(false);
 //     }, 3000); // Adjust the timeout duration as needed (3 seconds in this example)
 
 //     return () => clearTimeout(notificationTimeout); // Clear the timeout on component unmount
@@ -999,9 +1020,9 @@ const handleSquareClick = (row, col) => {
       console.log('Piece moved successfully');
       setValidMovesForSelectedPiece([]);  //resets the valid moves for easy mode/check functions
       updateValidMovePositions(row, col); //offers the new valid moves to account for the check function that I need to make
-      // if (isKingInCheck()) {
+      // if (isKingInchecks()) {
       //   console.log('King is in check!');
-      //   showNotification('Check!');
+      //   showNotification('checks!');
       // }
       
     } else {
@@ -1082,7 +1103,7 @@ return (
         </div>
         <div className={`flash-alert${showAlert || checkNotification ? ' visible' : ''}`}>
   {showAlert ? 'Invalid move for the selected piece.' : ''}
-  {checkNotification ? 'Check!' : ''}
+  {checkNotification ? 'checks!' : ''}
 </div>
         <div className="col-2 col-md-2 offset-md-1">
           <div className="taken-pieces">
@@ -1117,9 +1138,9 @@ export default Chessboard;
 
 
 
-  // if (isCheckmate(currentPlayer)) {
+  // if (ischecksmate(currentPlayer)) {
   //   setGameOver(true);
-  //   setCheckmateMessage(`${currentPlayer} is in checkmate! Game Over.`);
+  //   setchecksmateMessage(`${currentPlayer} is in checkmate! Game Over.`);
   //   setGameOverAlert(true); // Show game over alert
   //   // Hide the game over alert after 3 seconds (adjust the timeout duration as needed)
   //   setTimeout(() => {
@@ -1129,7 +1150,7 @@ export default Chessboard;
 
 
   
-// const isKingInCheck = () => {
+// const isKingInchecks = () => {
 //   // Find the position of the current player's king (e.g., 'K' for white or 'k' for black).
 //   const kingSymbol = currentPlayer === 'White' ? 'K' : 'k';
 //   let kingPosition = null;
@@ -1162,7 +1183,7 @@ export default Chessboard;
 //     }
 //   }
 
-//   // Check if any of the opponent's pieces can attack the king's position.
+//   // checks if any of the opponent's pieces can attack the king's position.
 //   for (const move of validMovesForOpponent) {
 //     if (move.row === kingPosition.row && move.col === kingPosition.col) {
 //       return true; // The king is in check.
