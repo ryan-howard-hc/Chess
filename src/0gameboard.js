@@ -13,7 +13,7 @@ const Chessboard = () => {
   // const [gameOver, setGameOver] = useState(false);
   // const [checkmateMessage, setchecksmateMessage] = useState('');
   // const [gameOverAlert, setGameOverAlert] = useState(false);
-  const [checkNotification, setchecksNotification] = useState(false);
+  const [checkNotification, setCheckNotification] = useState(false);
 
 
 const [easyMode, setEasyMode] = useState(false);   //sets initial state for my easy mode component to be turned off
@@ -61,7 +61,7 @@ const [takenPieces, setTakenPieces] = useState([]); //refer to line 68
 
 const movePiece = (fromRow, fromCol, toRow, toCol) => {    // function takes the four coordinate parameters, from and to
   if (fromRow === toRow && fromCol === toCol) { 
-    return; // if statement checks whether the source/destination are the same. therefore returns early and doesnt perform any actions
+    return; // if statement check whether the source/destination are the same. therefore returns early and doesnt perform any actions
   }
 
   const newBoardState = [...boardState]; //creates new shalow array, copies all the elements from the previous array. boardState is the 2d array of my board, this effectively helps keep the board the same while you can move or simulate/decide where your next piece will go. 
@@ -75,7 +75,7 @@ const movePiece = (fromRow, fromCol, toRow, toCol) => {    // function takes the
       console.log('Capturing piece at destination:', newBoardState[toRow][toCol]);
       setTakenPieces([...takenPieces, newBoardState[toRow][toCol]]);
       newBoardState[toRow][toCol] = ' ';
-    } //if statement checks if there is a piece at the destination coordinates based on the updated newBoardState and logs that a piece has been captured.
+    } //if statement check if there is a piece at the destination coordinates based on the updated newBoardState and logs that a piece has been captured.
     // (LATER in other functions determines whether each individual piece's logic will actually capture the target piece)
 
   newBoardState[toRow][toCol] = piece; 
@@ -99,7 +99,7 @@ const isPawnMoveValid = (fromRow, fromCol, toRow, toCol, piece, currentPlayer) =
   const startingRow = currentPlayer === 'White' ? 1 : 6;
 
   if ((piece === 'p' && currentPlayer === 'White') || (piece === 'P' && currentPlayer === 'Black')) {
-    // checks if it's the correct player's turn
+    // check if it's the correct player's turn
     console.log('It is not the current player\'s turn.');
     return false;
   }
@@ -349,11 +349,16 @@ const isKingMoveValid = (fromRow, fromCol, toRow, toCol, piece, currentPlayer) =
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 const [showAlert, setShowAlert] = useState(false);
 
+const [notification, setNotification] = useState({ message: '', visible: false });
+
 const showNotification = (message) => {
-  setShowAlert(true);
-  setTimeout(() => {
-    setShowAlert(false);
-  }, 3000);
+  setNotification({ message, visible: true });
+
+  if (message === 'check') {
+    setTimeout(() => {
+      setNotification({ message: '', visible: false });
+    }, 3000);
+  }
 };
 
 
@@ -363,21 +368,21 @@ const updateValidMovePositions = (row, col) => {
   const validPositions = [];
 
 if (piece === 'P' && currentPlayer === 'White') {
-    // checks if the pawn can move one square forward
+    // check if the pawn can move one square forward
     if (row + 1 < 8 && boardState[row + 1][col] === ' ') {
       validPositions.push({ row: row + 1, col });
     }
   
-    // checks if the pawn can move two squares forward from its starting position
+    // check if the pawn can move two squares forward from its starting position
     if (row === 1 && boardState[row + 1][col] === ' ' && boardState[row + 2][col] === ' ') {
       validPositions.push({ row: row + 2, col });
     }
   
-    // checks if the pawn can capture diagonally to the right
+    // check if the pawn can capture diagonally to the right
     if (col + 1 < 8 && row + 1 < 8) {
       if (boardState[row + 1][col + 1] !== ' ' && ['B', 'N', 'Q', 'P', 'R'].includes(boardState[row][col])) {
         if (boardState[row + 1][col + 1] === 'k') {
-          showNotification('checks!');
+          showNotification('check!');
         }
         validPositions.push({ row: row + 1, col: col + 1 });
       }
@@ -386,7 +391,7 @@ if (piece === 'P' && currentPlayer === 'White') {
     if (col - 1 >= 0 && row + 1 < 8) {
       if (boardState[row + 1][col - 1] !== ' ' && ['B', 'N', 'Q', 'P', 'R'].includes(boardState[row][col])) {
         if (boardState[row + 1][col - 1] === 'k') {
-          showNotification('checks!');
+          showNotification('check!');
         }
         validPositions.push({ row: row + 1, col: col - 1 });
       }
@@ -399,31 +404,31 @@ else if (piece === 'p' && currentPlayer === 'Black') {
 
 
 
-    // checks if the pawn can move one square forward
+    // check if the pawn can move one square forward
     if (row - 1 >= 0 && boardState[row - 1][col] === ' ') {
       validPositions.push({ row: row - 1, col });
     }
   
-    // checks if the pawn can move two squares forward from its starting position
+    // check if the pawn can move two squares forward from its starting position
     if (row === 6 && boardState[row - 1][col] === ' ' && boardState[row - 2][col] === ' ') {
       validPositions.push({ row: row - 2, col });
     }
   
-    // checks if the pawn can capture diagonally to the right
+    // check if the pawn can capture diagonally to the right
     if (col + 1 < 8 && row - 1 >= 0) {
       if (boardState[row - 1][col + 1] !== ' ' && ['b', 'n', 'q', 'p', 'r'].includes(boardState[row][col])) {
         if (boardState[row - 1][col + 1] === 'K') {
-          showNotification('checks!');
+          showNotification('check!');
         }
         validPositions.push({ row: row - 1, col: col + 1 });
       }
     }
   
-    // checks if the pawn can capture diagonally to the left
+    // check if the pawn can capture diagonally to the left
     if (col - 1 >= 0 && row - 1 >= 0) {
       if (boardState[row - 1][col - 1] !== ' ' && ['b', 'n', 'q', 'p', 'r'].includes(boardState[row][col])) {
         if (boardState[row - 1][col - 1] === 'K') {
-          showNotification('checks!');
+          showNotification('check!');
         }
         validPositions.push({ row: row - 1, col: col - 1 });
       }
@@ -439,14 +444,14 @@ else if (piece === 'p' && currentPlayer === 'Black') {
 }
 
 else if (piece === 'R' && currentPlayer === 'White') {
-  // checks valid moves for the rook in the upward direction
+  // check valid moves for the rook in the upward direction
   for (let r = row - 1; r >= 0; r--) {
     if (boardState[r][col] === ' ') {
       validPositions.push({ row: r, col });
     } else if (/[bnkqpr]/.test(boardState[r][col])) {
       validPositions.push({ row: r, col });
       if (boardState[r][col] === 'k') {
-        showNotification("checks!"); 
+        showNotification("check!"); 
       }
       break; // stops the loop when you encounter a piece
     } else {
@@ -454,14 +459,14 @@ else if (piece === 'R' && currentPlayer === 'White') {
     }
   }
 
-  // checks valid moves for the rook in the downward direction
+  // check valid moves for the rook in the downward direction
   for (let r = row + 1; r < 8; r++) {
     if (boardState[r][col] === ' ') {
       validPositions.push({ row: r, col });
     } else if (/[bnkqpr]/.test(boardState[r][col])) {
       validPositions.push({ row: r, col });
       if (boardState[r][col] === 'k') {
-        showNotification("checks!"); 
+        showNotification("check!"); 
       }
       break; // stops the loop when you encounter a piece
     } else {
@@ -469,14 +474,14 @@ else if (piece === 'R' && currentPlayer === 'White') {
     }
   }
 
-  // checks valid moves for the rook to the right
+  // check valid moves for the rook to the right
   for (let c = col + 1; c < 8; c++) {
     if (boardState[row][c] === ' ') {
       validPositions.push({ row, col: c });
     } else if (/[bnkqpr]/.test(boardState[row][c])) {
       validPositions.push({ row, col: c });
       if (boardState[row][c] === 'k') {
-        showNotification("checks!");
+        showNotification("check!");
       }
       break; // stops the loop when you encounter a piece
     } else {
@@ -484,14 +489,14 @@ else if (piece === 'R' && currentPlayer === 'White') {
     }
   }
 
-  // checks valid moves for the rook to the left
+  // check valid moves for the rook to the left
   for (let c = col - 1; c >= 0; c--) {
     if (boardState[row][c] === ' ') {
       validPositions.push({ row, col: c });
     } else if (/[bnkqpr]/.test(boardState[row][c])) {
       validPositions.push({ row, col: c });
       if (boardState[row][c] === 'k') {
-        showNotification("checks!"); 
+        showNotification("check!"); 
       }
       break; // stops the loop when you encounter a piece
     } else {
@@ -501,14 +506,14 @@ else if (piece === 'R' && currentPlayer === 'White') {
   console.log('Valid move positions for rook:', validPositions);
 }
 else if (piece === 'r' && currentPlayer === 'Black') {
-  // checks valid moves for the rook in the upward direction
+  // check valid moves for the rook in the upward direction
   for (let r = row - 1; r >= 0; r--) {
     if (boardState[r][col] === ' ') {
       validPositions.push({ row: r, col });
     } else if (/[BNKQPR]/.test(boardState[r][col])) {
       validPositions.push({ row: r, col });
       if (boardState[r][col] === 'K') {
-        showNotification("Opponent's king is in check!"); 
+        showNotification("Opponent's king is in check"); 
       }
       break; // stops the loop when you encounter a piece
     } else {
@@ -516,14 +521,14 @@ else if (piece === 'r' && currentPlayer === 'Black') {
     }
   }
 
-  // checks valid moves for the rook in the downward direction
+  // check valid moves for the rook in the downward direction
   for (let r = row + 1; r < 8; r++) {
     if (boardState[r][col] === ' ') {
       validPositions.push({ row: r, col });
     } else if (/[BNKQPR]/.test(boardState[r][col])) {
       validPositions.push({ row: r, col });
       if (boardState[r][col] === 'K') {
-        showNotification("Opponent's king is in check!"); 
+        showNotification("Opponent's king is in check"); 
       }
       break; // stops the loop when you encounter a piece
     } else {
@@ -531,14 +536,14 @@ else if (piece === 'r' && currentPlayer === 'Black') {
     }
   }
 
-  // checks valid moves for the rook to the right
+  // check valid moves for the rook to the right
   for (let c = col + 1; c < 8; c++) {
     if (boardState[row][c] === ' ') {
       validPositions.push({ row, col: c });
     } else if (/[BNKQPR]/.test(boardState[row][c])) {
       validPositions.push({ row, col: c });
       if (boardState[row][c] === 'K') {
-        showNotification("Opponent's king is in check!"); 
+        showNotification("Opponent's king is in check"); 
       }
       break; // stops the loop when you encounter a piece
     } else {
@@ -546,14 +551,14 @@ else if (piece === 'r' && currentPlayer === 'Black') {
     }
   }
 
-  // checks valid moves for the rook to the left
+  // check valid moves for the rook to the left
   for (let c = col - 1; c >= 0; c--) {
     if (boardState[row][c] === ' ') {
       validPositions.push({ row, col: c });
     } else if (/[BNKQPR]/.test(boardState[row][c])) {
       validPositions.push({ row, col: c });
       if (boardState[row][c] === 'K') {
-        showNotification("Opponent's king is in check!"); 
+        showNotification("Opponent's king is in check"); 
       }
       break; // stops the loop when you encounter a piece
     } else {
@@ -583,7 +588,7 @@ else if (piece === 'N' && currentPlayer === 'White') {
       if (boardState[newRow][newCol] === ' ' || ['b', 'n', 'k', 'q', 'p', 'r'].includes(boardState[newRow][newCol])) {
         validPositions.push(move);
         if (boardState[newRow][newCol] === 'k') {
-          showNotification("Check!"); 
+          showNotification("check"); 
         }
       }
     }
@@ -609,7 +614,7 @@ else if (piece === 'N' && currentPlayer === 'White') {
         if (boardState[newRow][newCol] === ' ' || ['B', 'N', 'K', 'Q', 'P', 'R'].includes(boardState[newRow][newCol])) {
           validPositions.push(move);
           if (boardState[newRow][newCol] === 'K') {
-            showNotification("Check!"); 
+            showNotification("check"); 
           }
         }
       }
@@ -621,14 +626,14 @@ else if (piece === 'N' && currentPlayer === 'White') {
 
 
   else if (piece === 'B' && currentPlayer === 'White') {
-    // checks valid moves for the bishop diagonally to the upper right
+    // check valid moves for the bishop diagonally to the upper right
     for (let r = row - 1, c = col + 1; r >= 0 && c < 8; r--, c++) {
       if (boardState[r][c] === ' ') {
         validPositions.push({ row: r, col: c });
       } else if (['b', 'n', 'k', 'q', 'p', 'r'].includes(boardState[r][c])) {
         validPositions.push({ row: r, col: c });
         if (boardState[r][c] === 'k') {
-          showNotification("check!"); 
+          showNotification("check"); 
         }
         break; // stops if there's an opponent's piece or a friendly piece
       } else {
@@ -636,14 +641,14 @@ else if (piece === 'N' && currentPlayer === 'White') {
       }
     }
   
-    // checks valid moves for the bishop diagonally to the upper left
+    // check valid moves for the bishop diagonally to the upper left
     for (let r = row - 1, c = col - 1; r >= 0 && c >= 0; r--, c--) {
       if (boardState[r][c] === ' ') {
         validPositions.push({ row: r, col: c });
       } else if (['b', 'n', 'k', 'q', 'p', 'r'].includes(boardState[r][c])) {
         validPositions.push({ row: r, col: c });
         if (boardState[r][c] === 'k') {
-          showNotification("check!"); 
+          showNotification("check"); 
         }
         break; // stops if there's an opponent's piece or a friendly piece
       } else {
@@ -651,14 +656,14 @@ else if (piece === 'N' && currentPlayer === 'White') {
       }
     }
   
-    // checks valid moves for the bishop diagonally to the lower right
+    // check valid moves for the bishop diagonally to the lower right
     for (let r = row + 1, c = col + 1; r < 8 && c < 8; r++, c++) {
       if (boardState[r][c] === ' ') {
         validPositions.push({ row: r, col: c });
       } else if (['b', 'n', 'k', 'q', 'p', 'r'].includes(boardState[r][c])) {
         validPositions.push({ row: r, col: c });
         if (boardState[r][c] === 'k') {
-          showNotification("check!"); 
+          showNotification("check"); 
         }
         break; // stops if there's an opponent's piece or a friendly piece
       } else {
@@ -666,14 +671,14 @@ else if (piece === 'N' && currentPlayer === 'White') {
       }
     }
   
-    // checks valid moves for the bishop diagonally to the lower left
+    // check valid moves for the bishop diagonally to the lower left
     for (let r = row + 1, c = col - 1; r < 8 && c >= 0; r++, c--) {
       if (boardState[r][c] === ' ') {
         validPositions.push({ row: r, col: c });
       } else if (['b', 'n', 'k', 'q', 'p', 'r'].includes(boardState[r][c])) {
         validPositions.push({ row: r, col: c });
         if (boardState[r][c] === 'k') {
-          showNotification("check!"); 
+          showNotification("check"); 
         }
         break; // stops if there's an opponent's piece or a friendly piece
       } else {
@@ -683,14 +688,14 @@ else if (piece === 'N' && currentPlayer === 'White') {
     console.log('Valid move positions for bishop:', validPositions);
   }
   else if (piece === 'b' && currentPlayer === 'Black') {
-    // checks valid moves for the bishop diagonally to the upper right
+    // check valid moves for the bishop diagonally to the upper right
     for (let r = row - 1, c = col + 1; r >= 0 && c < 8; r--, c++) {
       if (boardState[r][c] === ' ') {
         validPositions.push({ row: r, col: c });
       } else if (['B', 'N', 'K', 'Q', 'P', 'R'].includes(boardState[r][c])) {
         validPositions.push({ row: r, col: c });
         if (boardState[r][c] === 'K') {
-          showNotification("check!"); 
+          showNotification("check"); 
         }
         break; // stops if there's an opponent's piece or a friendly piece
       } else {
@@ -698,14 +703,14 @@ else if (piece === 'N' && currentPlayer === 'White') {
       }
     }
   
-    // checks valid moves for the bishop diagonally to the upper left
+    // check valid moves for the bishop diagonally to the upper left
     for (let r = row - 1, c = col - 1; r >= 0 && c >= 0; r--, c--) {
       if (boardState[r][c] === ' ') {
         validPositions.push({ row: r, col: c });
       } else if (['B', 'N', 'K', 'Q', 'P', 'R'].includes(boardState[r][c])) {
         validPositions.push({ row: r, col: c });
         if (boardState[r][c] === 'K') {
-          showNotification("check!"); 
+          showNotification("check"); 
         }
         break; // stops if there's an opponent's piece or a friendly piece
       } else {
@@ -713,14 +718,14 @@ else if (piece === 'N' && currentPlayer === 'White') {
       }
     }
   
-    // checks valid moves for the bishop diagonally to the lower right
+    // check valid moves for the bishop diagonally to the lower right
     for (let r = row + 1, c = col + 1; r < 8 && c < 8; r++, c++) {
       if (boardState[r][c] === ' ') {
         validPositions.push({ row: r, col: c });
       } else if (['B', 'N', 'K', 'Q', 'P', 'R'].includes(boardState[r][c])) {
         validPositions.push({ row: r, col: c });
         if (boardState[r][c] === 'K') {
-          showNotification("check!"); 
+          showNotification("check"); 
         }
         break; // stops if there's an opponent's piece or a friendly piece
       } else {
@@ -728,14 +733,14 @@ else if (piece === 'N' && currentPlayer === 'White') {
       }
     }
   
-    // checks valid moves for the bishop diagonally to the lower left
+    // check valid moves for the bishop diagonally to the lower left
     for (let r = row + 1, c = col - 1; r < 8 && c >= 0; r++, c--) {
       if (boardState[r][c] === ' ') {
         validPositions.push({ row: r, col: c });
       } else if (['B', 'N', 'K', 'Q', 'P', 'R'].includes(boardState[r][c])) {
         validPositions.push({ row: r, col: c });
         if (boardState[r][c] === 'K') {
-          showNotification("check!"); 
+          showNotification("check"); 
         }
         break; // stops if there's an opponent's piece or a friendly piece
       } else {
@@ -748,14 +753,14 @@ else if (piece === 'N' && currentPlayer === 'White') {
 
 
   else if (piece === 'Q' && currentPlayer === 'White') {
-    // checks valid moves for the queen horizontally to the right
+    // check valid moves for the queen horizontally to the right
     for (let c = col + 1; c < 8; c++) {
       if (boardState[row][c] === ' ') {
         validPositions.push({ row, col: c });
       } else if (['b', 'n', 'k', 'q', 'p', 'r'].includes(boardState[row][c])) {
         validPositions.push({ row, col: c });
         if (boardState[row][c] === 'k') {
-          showNotification("check!"); 
+          showNotification("check"); 
         }
         break; // stops if there's an opponent's piece or a friendly piece
       } else {
@@ -763,14 +768,14 @@ else if (piece === 'N' && currentPlayer === 'White') {
       }
     }
   
-    // checks valid moves for the queen horizontally to the left
+    // check valid moves for the queen horizontally to the left
     for (let c = col - 1; c >= 0; c--) {
       if (boardState[row][c] === ' ') {
         validPositions.push({ row, col: c });
       } else if (['b', 'n', 'k', 'q', 'p', 'r'].includes(boardState[row][c])) {
         validPositions.push({ row, col: c });
         if (boardState[row][c] === 'k') {
-          showNotification("check!"); 
+          showNotification("check"); 
         }
         break; // stops if there's an opponent's piece or a friendly piece
       } else {
@@ -778,14 +783,14 @@ else if (piece === 'N' && currentPlayer === 'White') {
       }
     }
   
-    // checks valid moves for the queen vertically upwards
+    // check valid moves for the queen vertically upwards
     for (let r = row - 1; r >= 0; r--) {
       if (boardState[r][col] === ' ') {
         validPositions.push({ row: r, col });
       } else if (boardState[r][col].toUpperCase() === 'B') {
         validPositions.push({ row: r, col });
         if (boardState[r][col] === 'k') {
-          showNotification("check!"); 
+          showNotification("check"); 
         }
         break; // stops if there's an opponent's piece or a friendly piece
       } else {
@@ -793,14 +798,14 @@ else if (piece === 'N' && currentPlayer === 'White') {
       }
     }
   
-    // checks valid moves for the queen vertically downwards
+    // check valid moves for the queen vertically downwards
     for (let r = row + 1; r < 8; r++) {
       if (boardState[r][col] === ' ') {
         validPositions.push({ row: r, col });
       } else if (['b', 'n', 'k', 'q', 'p', 'r'].includes(boardState[r][col])) {
         validPositions.push({ row: r, col });
         if (boardState[r][col] === 'k') {
-          showNotification("check!"); 
+          showNotification("check"); 
         }
         break; // stops if there's an opponent's piece or a friendly piece
       } else {
@@ -808,14 +813,14 @@ else if (piece === 'N' && currentPlayer === 'White') {
       }
     }
   
-    // checks valid moves for the queen diagonally to the upper right
+    // check valid moves for the queen diagonally to the upper right
     for (let r = row - 1, c = col + 1; r >= 0 && c < 8; r--, c++) {
       if (boardState[r][c] === ' ') {
         validPositions.push({ row: r, col: c });
       } else if (['b', 'n', 'k', 'q', 'p', 'r'].includes(boardState[r][c])) {
         validPositions.push({ row: r, col: c });
         if (boardState[r][c] === 'k') {
-          showNotification("check!"); 
+          showNotification("check"); 
         }
         break; // stops if there's an opponent's piece or a friendly piece
       } else {
@@ -823,14 +828,14 @@ else if (piece === 'N' && currentPlayer === 'White') {
       }
     }
   
-    // checks valid moves for the queen diagonally to the upper left
+    // check valid moves for the queen diagonally to the upper left
     for (let r = row - 1, c = col - 1; r >= 0 && c >= 0; r--, c--) {
       if (boardState[r][c] === ' ') {
         validPositions.push({ row: r, col: c });
       } else if (['b', 'n', 'k', 'q', 'p', 'r'].includes(boardState[r][c])) {
         validPositions.push({ row: r, col: c });
         if (boardState[r][c] === 'k') {
-          showNotification("check!"); 
+          showNotification("check"); 
         }
         break; // stops if there's an opponent's piece or a friendly piece
       } else {
@@ -838,14 +843,14 @@ else if (piece === 'N' && currentPlayer === 'White') {
       }
     }
   
-    // checks valid moves for the queen diagonally to the lower right
+    // check valid moves for the queen diagonally to the lower right
     for (let r = row + 1, c = col + 1; r < 8 && c < 8; r++, c++) {
       if (boardState[r][c] === ' ') {
         validPositions.push({ row: r, col: c });
       } else if (['b', 'n', 'k', 'q', 'p', 'r'].includes(boardState[r][c])) {
         validPositions.push({ row: r, col: c });
         if (boardState[r][c] === 'k') {
-          showNotification("check!"); 
+          showNotification("check"); 
         }
         break; // stops if there's an opponent's piece or a friendly piece
       } else {
@@ -853,14 +858,14 @@ else if (piece === 'N' && currentPlayer === 'White') {
       }
     }
   
-    // checks valid moves for the queen diagonally to the lower left
+    // check valid moves for the queen diagonally to the lower left
     for (let r = row + 1, c = col - 1; r < 8 && c >= 0; r++, c--) {
       if (boardState[r][c] === ' ') {
         validPositions.push({ row: r, col: c });
       } else if (['b', 'n', 'k', 'q', 'p', 'r'].includes(boardState[r][c])) {
         validPositions.push({ row: r, col: c });
         if (boardState[r][c] === 'k') {
-          showNotification("check!"); 
+          showNotification("check"); 
         }
         break; // stops if there's an opponent's piece or a friendly piece
       } else {
@@ -871,14 +876,14 @@ else if (piece === 'N' && currentPlayer === 'White') {
   }
   
   else if (piece === 'q' && currentPlayer === 'Black') {
-    // checks valid moves for the queen horizontally to the right
+    // check valid moves for the queen horizontally to the right
     for (let c = col + 1; c < 8; c++) {
       if (boardState[row][c] === ' ') {
         validPositions.push({ row, col: c });
       } else if (['B', 'N', 'K', 'Q', 'P', 'R'].includes(boardState[row][c])) {
         validPositions.push({ row, col: c });
         if (boardState[row][c] === 'K') {
-          showNotification("check!"); 
+          showNotification("check"); 
         }
         break; // stops if there's an opponent's piece or a friendly piece
       } else {
@@ -886,14 +891,14 @@ else if (piece === 'N' && currentPlayer === 'White') {
       }
     }
   
-    // checks valid moves for the queen horizontally to the left
+    // check valid moves for the queen horizontally to the left
     for (let c = col - 1; c >= 0; c--) {
       if (boardState[row][c] === ' ') {
         validPositions.push({ row, col: c });
       } else if (['B', 'N', 'K', 'Q', 'P', 'R'].includes(boardState[row][c])) {
         validPositions.push({ row, col: c });
         if (boardState[row][c] === 'K') {
-          showNotification("check!"); 
+          showNotification("check"); 
         }
         break; // stops if there's an opponent's piece or a friendly piece
       } else {
@@ -901,14 +906,14 @@ else if (piece === 'N' && currentPlayer === 'White') {
       }
     }
   
-    // checks valid moves for the queen vertically upwards
+    // check valid moves for the queen vertically upwards
     for (let r = row - 1; r >= 0; r--) {
       if (boardState[r][col] === ' ') {
         validPositions.push({ row: r, col });
       } else if (['B', 'N', 'K', 'Q', 'P', 'R'].includes(boardState[r][col])) {
         validPositions.push({ row: r, col });
         if (boardState[r][col] === 'K') {
-          showNotification("check!"); 
+          showNotification("check"); 
         }
         break; // stops if there's an opponent's piece or a friendly piece
       } else {
@@ -916,14 +921,14 @@ else if (piece === 'N' && currentPlayer === 'White') {
       }
     }
   
-    // checks valid moves for the queen vertically downwards
+    // check valid moves for the queen vertically downwards
     for (let r = row + 1; r < 8; r++) {
       if (boardState[r][col] === ' ') {
         validPositions.push({ row: r, col });
       } else if (['B', 'N', 'K', 'Q', 'P', 'R'].includes(boardState[r][col])) {
         validPositions.push({ row: r, col });
         if (boardState[r][col] === 'K') {
-          showNotification("check!"); 
+          showNotification("check"); 
         }
         break; // stops if there's an opponent's piece or a friendly piece
       } else {
@@ -931,14 +936,14 @@ else if (piece === 'N' && currentPlayer === 'White') {
       }
     }
   
-    // checks valid moves for the queen diagonally to the upper right
+    // check valid moves for the queen diagonally to the upper right
     for (let r = row - 1, c = col + 1; r >= 0 && c < 8; r--, c++) {
       if (boardState[r][c] === ' ') {
         validPositions.push({ row: r, col: c });
       } else if (['B', 'N', 'K', 'Q', 'P', 'R'].includes(boardState[r][c])) {
         validPositions.push({ row: r, col: c });
         if (boardState[r][c] === 'K') {
-          showNotification("check!"); 
+          showNotification("check"); 
         }
         break; // stops if there's an opponent's piece or a friendly piece
       } else {
@@ -946,14 +951,14 @@ else if (piece === 'N' && currentPlayer === 'White') {
       }
     }
   
-    // checks valid moves for the queen diagonally to the upper left
+    // check valid moves for the queen diagonally to the upper left
     for (let r = row - 1, c = col - 1; r >= 0 && c >= 0; r--, c--) {
       if (boardState[r][c] === ' ') {
         validPositions.push({ row: r, col: c });
       } else if (['B', 'N', 'K', 'Q', 'P', 'R'].includes(boardState[r][c])) {
         validPositions.push({ row: r, col: c });
         if (boardState[r][c] === 'K') {
-          showNotification("check!"); 
+          showNotification("check"); 
         }
         break; // stops if there's an opponent's piece or a friendly piece
       } else {
@@ -961,14 +966,14 @@ else if (piece === 'N' && currentPlayer === 'White') {
       }
     }
   
-    // checks valid moves for the queen diagonally to the lower right
+    // check valid moves for the queen diagonally to the lower right
     for (let r = row + 1, c = col + 1; r < 8 && c < 8; r++, c++) {
       if (boardState[r][c] === ' ') {
         validPositions.push({ row: r, col: c });
       } else if (['B', 'N', 'K', 'Q', 'P', 'R'].includes(boardState[r][c])) {
         validPositions.push({ row: r, col: c });
         if (boardState[r][c] === 'K') {
-          showNotification("check!"); 
+          showNotification("check"); 
         }
         break; // stops if there's an opponent's piece or a friendly piece
       } else {
@@ -976,14 +981,14 @@ else if (piece === 'N' && currentPlayer === 'White') {
       }
     }
   
-    // checks valid moves for the queen diagonally to the lower left
+    // check valid moves for the queen diagonally to the lower left
     for (let r = row + 1, c = col - 1; r < 8 && c >= 0; r++, c--) {
       if (boardState[r][c] === ' ') {
         validPositions.push({ row: r, col: c });
       } else if (['B', 'N', 'K', 'Q', 'P', 'R'].includes(boardState[r][c])) {
         validPositions.push({ row: r, col: c });
         if (boardState[r][c] === 'K') {
-          showNotification("check!"); 
+          showNotification("check"); 
         }
         break; // stops if there's an opponent's piece or a friendly piece
       } else {
@@ -997,7 +1002,7 @@ else if (piece === 'N' && currentPlayer === 'White') {
   
 
   else if (piece === 'K' && currentPlayer === 'White') {
-    // checks valid moves for the king in all 8 directions
+    // check valid moves for the king in all 8 directions
     const directions = [
       { row: -1, col: -1 },
       { row: -1, col: 0 },
@@ -1022,7 +1027,7 @@ else if (piece === 'N' && currentPlayer === 'White') {
       console.log('Valid move positions for king:', validPositions);
 
   } else if (piece === 'k' && currentPlayer === 'Black') {
-    // checks valid moves for the king in all 8 directions
+    // check valid moves for the king in all 8 directions
     const directions = [
       { row: -1, col: -1 },
       { row: -1, col: 0 },
@@ -1107,8 +1112,8 @@ const handleSquareClick = (row, col) => {
       setValidMovesForSelectedPiece([]);  //resets the valid moves for easy mode/check functions
       updateValidMovePositions(row, col); //offers the new valid moves to account for the check function that I need to make
       // if (isKingInchecks()) {
-      //   console.log('King is in check!');
-      //   showNotification('checks!');
+      //   console.log('King is in check');
+      //   showNotification('check!');
       // }
       
     } else {
@@ -1188,9 +1193,8 @@ return (
           </div>
           
         </div>
-        <div className={`flash-showNotification${showAlert || checkNotification ? ' visible' : ''}`}>
-  {showAlert ? 'Invalid move for the selected piece.' : ''}
-  {checkNotification ? 'checks!' : ''}
+        <div className={`flash-alert${notification.visible ? ' visible' : ''}`}>
+  {notification.message}
 </div>
         <div className="col-2 col-md-2 offset-md-1">
           <div className="taken-pieces">
@@ -1228,8 +1232,8 @@ export default Chessboard;
   // if (ischecksmate(currentPlayer)) {
   //   setGameOver(true);
   //   setchecksmateMessage(`${currentPlayer} is in checkmate! Game Over.`);
-  //   setGameOverAlert(true); // Show game over showNotification
-  //   // Hide the game over showNotification after 3 seconds (adjust the timeout duration as needed)
+  //   setGameOverAlert(true); // Show game over alert
+  //   // Hide the game over alert after 3 seconds (adjust the timeout duration as needed)
   //   setTimeout(() => {
   //     setGameOverAlert(false);
   //   }, 3000);
@@ -1270,7 +1274,7 @@ export default Chessboard;
 //     }
 //   }
 
-//   // checks if any of the opponent's pieces can attack the king's position.
+//   // check if any of the opponent's pieces can attack the king's position.
 //   for (const move of validMovesForOpponent) {
 //     if (move.row === kingPosition.row && move.col === kingPosition.col) {
 //       return true; // The king is in check.
