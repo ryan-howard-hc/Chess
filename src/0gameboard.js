@@ -368,7 +368,6 @@ const updateValidMovePositions = (row, col) => {
       if (boardState[row + 1][col + 1] !== ' ' && ['B', 'N', 'Q', 'P', 'R'].includes(boardState[row][col])) {
         if (boardState[row + 1][col + 1] === 'k') {
           alert('Check!');
-          // Handle the logic for capturing the opponent's king here.
         }
         validPositions.push({ row: row + 1, col: col + 1 });
       }
@@ -378,7 +377,6 @@ const updateValidMovePositions = (row, col) => {
       if (boardState[row + 1][col - 1] !== ' ' && ['B', 'N', 'Q', 'P', 'R'].includes(boardState[row][col])) {
         if (boardState[row + 1][col - 1] === 'k') {
           alert('Check!');
-          // Handle the logic for capturing the opponent's king here.
         }
         validPositions.push({ row: row + 1, col: col - 1 });
       }
@@ -399,13 +397,23 @@ const updateValidMovePositions = (row, col) => {
     }
   
     // checks if the pawn can capture diagonally to the right
-    if (col + 1 < 8 && row - 1 >= 0 && boardState[row - 1][col + 1] !== ' ' && ['b', 'n', 'k', 'q', 'p', 'r'].includes(boardState[row][col])) {
-      validPositions.push({ row: row - 1, col: col + 1 });
+    if (col + 1 < 8 && row - 1 >= 0) {
+      if (boardState[row - 1][col + 1] !== ' ' && ['b', 'n', 'q', 'p', 'r'].includes(boardState[row][col])) {
+        if (boardState[row - 1][col + 1] === 'K') {
+          alert('Check!');
+        }
+        validPositions.push({ row: row - 1, col: col + 1 });
+      }
     }
   
     // checks if the pawn can capture diagonally to the left
-    if (col - 1 >= 0 && row - 1 >= 0 && boardState[row - 1][col - 1] !== ' ' && ['b', 'n', 'k', 'q', 'p', 'r'].includes(boardState[row][col])) {
-      validPositions.push({ row: row - 1, col: col - 1 });
+    if (col - 1 >= 0 && row - 1 >= 0) {
+      if (boardState[row - 1][col - 1] !== ' ' && ['b', 'n', 'q', 'p', 'r'].includes(boardState[row][col])) {
+        if (boardState[row - 1][col - 1] === 'K') {
+          alert('Check!');
+        }
+        validPositions.push({ row: row - 1, col: col - 1 });
+      }
     }
   
   
