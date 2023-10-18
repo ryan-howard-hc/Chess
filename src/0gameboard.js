@@ -1164,16 +1164,16 @@ return (
   <div className="container col-12 col-md-12 ">
     
     <PlayerTurn currentPlayer={currentPlayer} />
-    <div className="btn-group mb-3 container col-6 col-md-6 ">
+    <div className="btn-group mb-3 container col-12 col-md-6 ">
       <button 
-          className={`btn btn-primary rounded chess-button ${easyMode ? 'active' : ''}`}
+          className={`btn btn-primary col-6 rounded chess-button ${easyMode ? 'active' : ''}`}
           onClick={toggleEasyMode}
       >
         Easy Mode
       </button>
 
       <button
-        className="btn btn-primary rounded chess-button"
+        className="btn btn-primary col-6 rounded chess-button"
         onClick={togglePieceDesign}
       >
         Change Pieces
@@ -1185,18 +1185,17 @@ return (
       <div className="row col-12 col-md-12">
         
 
-        <div className="col-6 col-md-6 chessboard-column offset-md-3" >
+        <div className="col-12 col-md-12 chessboard-column offset-md-3" >
 
-          <div className="chessboard "  style={{ marginLeft: '30px' }}>
-            
-            {board}
-          </div>
+        <div className="chessboard">
+  {board}
+</div>
           
         </div>
         <div className={`flash-alert${notification.visible ? ' visible' : ''}`}>
   {notification.message}
 </div>
-        <div className="col-2 col-md-2 offset-md-1">
+        <div className="col-12 col-md-2 offset-md-1">
           <div className="taken-pieces">
           <TakenPieces takenPieces={takenPieces} pieceDesign={pieceDesign} />
           </div>

@@ -35,7 +35,8 @@
   display: grid;
   grid-template-columns: repeat(8, 70px);
   grid-gap: 2px;
-  
+  margin-left: 30px;
+
   background-color:#fcedf1}
 
 .square {
@@ -98,4 +99,24 @@
 
 .flash-alert.visible {
   opacity: 1;
+}
+
+
+
+@media (max-width: 768px) {
+  .chessboard {
+    grid-template-columns: repeat(8, 35px); 
+    margin-left: 12px;
+  }
+
+  .square {
+    width: 35px; 
+    height: 35px; 
+    font-size: 18px; 
+  }
+
+  .chess-piece {
+    font-size: 2rem; 
+  }
+  
 }
