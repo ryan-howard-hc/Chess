@@ -6,7 +6,7 @@ import PlayerTurn from './07playerturns';
 import ChessPiece from './01chesspiece';
 import EasyModeToggle from './02easymode';
 import TakenPieces from './03takenpieces';
-
+import Timer from './08timer';
 const Chessboard = () => {
   // const [gameOver, setGameOver] = useState(false);
   // const [checkmateMessage, setchecksmateMessage] = useState('');
@@ -55,6 +55,13 @@ const toggleEasyMode = () => {
 const [takenPieces, setTakenPieces] = useState([]); //refer to line 68
 
 
+const [isWhiteTimerActive, setIsWhiteTimerActive] = useState(true);
+const switchTimers = () => {
+  setIsWhiteTimerActive((prevValue) => !prevValue);
+};
+
+
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 const movePiece = (fromRow, fromCol, toRow, toCol) => {    // function takes the four coordinate parameters, from and to
@@ -82,7 +89,7 @@ const movePiece = (fromRow, fromCol, toRow, toCol) => {    // function takes the
   console.log('Updated board state:', newBoardState); 
 
   setBoardState(newBoardState); //updates the game board to log that a move has just been made.
-  setCurrentPlayer(currentPlayer === 'White' ? 'Black' : 'White'); //updates current player
+  setCurrentPlayer(currentPlayer === 'White' ? 'Black' : 'White'); //updates current player through the set state which starts w white
 
   // Clear valid moves and selected piece after the move to prepare for next player's turn
   setSelectedPiece(null);
@@ -1134,14 +1141,14 @@ for (let row = 0; row < 8; row++) {
     
 }
 
+
 return (
-  <div className="container col-12 col-md-12 ">
-    
+  <div className="container col-12 col-md-12">
     <PlayerTurn currentPlayer={currentPlayer} />
-    <div className="btn-group mb-3 container col-12 col-md-6 ">
-      <button 
-          className={`btn btn-primary col-6 rounded chess-button ${easyMode ? 'active' : ''}`}
-          onClick={toggleEasyMode}
+    <div className="btn-group mb-3 container col-12 col-md-6">
+      <button
+        className={`btn btn-primary col-6 rounded chess-button ${easyMode ? 'active' : ''}`}
+        onClick={toggleEasyMode}
       >
         Easy Mode
       </button>
@@ -1152,31 +1159,33 @@ return (
       >
         Change Pieces
       </button>
-
     </div>
 
-    <div className="container col-12 col-md-12 ">
-      <div className="row col-12 col-md-12">
-        
 
-        <div className="col-12 col-md-6 chessboard-column offset-md-3" >
 
-<div className="chessboard">
-  {board}
-</div>
-          
+    <div className="container col-12 col-md-12">
+      <div className="row">
+        <div className="col-md-6 offset-md-3">
+          <div className="chessboard">{board}</div>
         </div>
         <div className={`flash-alert${notification.visible ? ' visible' : ''}`}>
-  {notification.message}
-</div>
-          <div className="taken-pieces col-12 col-md-2 offset-md-1">
+          {notification.message}
+        </div>
+        <div className="taken-pieces col-12 col-md-2 offset-md-1">
           <TakenPieces takenPieces={takenPieces} pieceDesign={pieceDesign} />
-          </div>
-
+        </div>
       </div>
     </div>
-
-
+    <div className="container col-12 col-md-12">
+        <div className="row">
+        <div className="col-md-6 col-6">
+  <Timer onTimerSwitch={switchTimers} />
+</div>
+<div className="col-md-6 col-6">
+  <Timer onTimerSwitch={switchTimers} />
+</div>
+        </div>
+      </div>
   </div>
 );
 };
