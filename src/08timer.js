@@ -94,20 +94,20 @@ class Timer extends Component {   // constructor is a method that gets called wh
           <input
             type="number"
             step="0.01"
-            placeholder="Enter minutes"
+            placeholder="Minutes"
             value={inputMinutes}
             onChange={(e) => this.handleInputChange(e)}
-            className='inputtimer'
+            className='inputtimer rounded-pill'
           />
         ) : (
           <div>{this.updateTimerDisplay()}</div>
         )}
         {isRunning ? (
-          <button onClick={() => this.pauseTimer()}>Pause</button>
+          <button className='timebutton btn btn-primary rounded' onClick={() => this.pauseTimer()}>Pause</button>
         ) : (
-          <button onClick={() => this.startTimer()}>Start</button>
+          <button className='timebutton btn btn-primary rounded' onClick={() => this.startTimer()}>Start</button>
         )}
-        <button onClick={() => this.stopTimer()}>Reset</button>
+        <button className='timebutton btn btn-primary rounded' onClick={() => this.stopTimer()}>Reset</button>
       </div>
     );
   }

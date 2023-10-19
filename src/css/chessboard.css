@@ -1,3 +1,7 @@
+.app {
+  background-image: url(./chess.jpg);
+}
+
 .chessboard-container {
   display: flex;
   justify-content: center;
@@ -6,15 +10,29 @@
   background-color: antiquewhite;
 }
 
+.timebutton {
+  background-color: rgb(208, 255, 208);
+  color: black;
+  border-color: rgb(208, 255, 208);
+  font-family: Meath;
+  font-size:30px;
+  margin-right: 5px;
+}
+
+
 .title {
   font-family: Canterbury;
   letter-spacing: 2px;
   font-size: 80px;
 }
 
+.timer-container {
+  margin-top: 10px;
+}
 
 .inputtimer{
-  
+  width:78px;
+  margin-right: 10px;
 }
 
 
@@ -186,6 +204,10 @@ h2{
 
   h2{
     font-size: 30px;
+  }
+
+  .timer-container {
+    margin-top: 20px;
   }
   
 }

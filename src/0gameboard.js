@@ -1176,7 +1176,7 @@ return (
         </div>
       </div>
     </div>
-    <div className="container col-12 col-md-12">
+    <div className="timer-container container col-12 col-md-12">
         <div className="row">
         <div className="col-md-6 col-6">
   <Timer onTimerSwitch={switchTimers} />
