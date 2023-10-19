@@ -65,6 +65,9 @@ class Timer extends Component {   // constructor is a method that gets called wh
     if (isRunning && intervalId) {
       clearInterval(intervalId);
       this.setState({ isRunning: false });
+      if (this.props.onTimerSwitch) {
+        this.props.onTimerSwitch(); 
+      }
     }
   }
 
