@@ -55,6 +55,35 @@ const toggleEasyMode = () => {
 const [takenPieces, setTakenPieces] = useState([]); //refer to line 68
 
 
+// const [whitePlayerTime, setWhitePlayerTime] = useState(0);
+// const [blackPlayerTime, setBlackPlayerTime] = useState(0);
+
+// useEffect(() => {
+//   const timer = currentPlayer === 'White' ? whitePlayerTime : blackPlayerTime;
+//   if (timer > 0) {
+//     const intervalId = setInterval(() => {
+//       if (currentPlayer === 'White' && whitePlayerTime > 0) {
+//         setWhitePlayerTime(whitePlayerTime - 1);
+//       } else if (currentPlayer === 'Black' && blackPlayerTime > 0) {
+//         setBlackPlayerTime(blackPlayerTime - 1);
+//       }
+//     }, 1000);
+
+//     return () => clearInterval(intervalId);
+//   }
+// }, [currentPlayer, whitePlayerTime, blackPlayerTime]);
+
+
+// const handleWhitePlayerTimeChange = (event) => {
+//   const minutes = parseFloat(event.target.value);
+//   setWhitePlayerTime(isNaN(minutes) ? 0 : minutes * 60); // Convert minutes to seconds
+// };
+
+// const handleBlackPlayerTimeChange = (event) => {
+//   const minutes = parseFloat(event.target.value);
+//   setBlackPlayerTime(isNaN(minutes) ? 0 : minutes * 60); // Convert minutes to seconds
+// };
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 const movePiece = (fromRow, fromCol, toRow, toCol) => {    // function takes the four coordinate parameters, from and to
@@ -1170,15 +1199,18 @@ return (
       </div>
     </div>
     <div className="container col-12 col-md-12">
-      <div className="row">
-        <div className="col-md-6 col-6">
-          <Timer />
-        </div>
-        <div className="col-md-6 col-6">
-          <Timer />
+        <div className="row">
+          <div className="col-md-6 col-6">
+            {/* <Timer player="White" time={whitePlayerTime} /> */}
+            <Timer />
+          </div>
+          <div className="col-md-6 col-6">
+            {/* <Timer player="Black" time={blackPlayerTime} /> */}
+            <Timer />
+
+          </div>
         </div>
       </div>
-    </div>
   </div>
 );
 };
