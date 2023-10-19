@@ -1,5 +1,6 @@
 import React from 'react';
 import ChessPiece from './01chesspiece';
+import './css/chessboard.css';
 
 const TakenPieces = ({ takenPieces, pieceDesign }) => {
   const takenPiecesList = takenPieces.map((piece, index) => (
@@ -14,7 +15,7 @@ const TakenPieces = ({ takenPieces, pieceDesign }) => {
 
   return (
     <div className="taken-pieces">
-      <h2>Taken Pieces</h2>
+      <h2 className='taken'>Taken Pieces</h2>
       <div className="taken-pieces-list">
         {takenPiecesList}
       </div>
