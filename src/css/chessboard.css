@@ -6,14 +6,46 @@
   background-color: antiquewhite;
 }
 
-.chessboard-column {
-
+.title {
+  font-family: Canterbury;
+  letter-spacing: 2px;
+  font-size: 80px;
 }
+
+
+.inputtimer{
+  
+}
+
+
+h2{
+  font-size: 60px;
+}
+
+@font-face {
+  font-family: 'Canterbury';
+  src: url('./Canterbury.ttf');
+}
+
+@font-face {
+  font-family: 'Meath';
+  src: url('./MeathFLF.ttf');
+}
+
+@font-face {
+  font-family: 'Paladin';
+  src: url('./PaladinFLF.ttf');
+}
+
+.chess-button {
+  font-family: Meath;
+}
+
 .chess-button:nth-child(1) {
   background-color: rgb(208, 255, 208);
   color: black;
   border-color: rgb(208, 255, 208);
-  font-size: 30px;
+  font-size: 40px;
   margin-right: 20px;
 }
 .chess-button.active:nth-child(1) {
@@ -24,7 +56,7 @@
 
  .chess-button:nth-child(2) {
   color: black;
-  font-size: 30px;
+  font-size: 40px;
   border-color: rgb(208, 255, 208);
   background-color: rgb(208, 255, 208);
 
@@ -58,7 +90,14 @@
   font-family: Arial, sans-serif; 
 }
 
+.player-turn {
+  font-family: Meath;
+  font-size: 80px;  
+  /* WHY ISNT THE SIZE WORKING??? */
+}
+
 .taken-pieces-list {
+  font-family: Canterbury;
   display: flex;       
   flex-direction: row; 
   flex-wrap: wrap;     
@@ -66,11 +105,16 @@
   align-items: center;
 
   justify-content: center;
-
-
 }
 
+.taken {
+  font-family: Canterbury;
+  letter-spacing: 1px;
+}
+
+
 .taken-piece {
+  font-family: Canterbury;
 
 }
 
@@ -132,6 +176,16 @@
     transition: opacity 0.5s ease-in-out;
     z-index: 999;
     
+  }
+
+  .title {
+    font-family: Canterbury;
+    letter-spacing: 2px;
+    font-size: 40px;
+  }
+
+  h2{
+    font-size: 30px;
   }
   
 }

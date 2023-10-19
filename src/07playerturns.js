@@ -1,10 +1,12 @@
 import React from 'react';
+import './css/chessboard.css';
+
 
 const PlayerTurn = ({ currentPlayer }) => {
   return (
     <div className="player-turn">
       
-      <h2>{currentPlayer}'s Turn</h2>
+      <h2>{currentPlayer}</h2>
     </div>
   );
 };

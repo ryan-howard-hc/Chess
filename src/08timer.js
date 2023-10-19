@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import './css/chessboard.css';
 
 
 class Timer extends Component {   // constructor is a method that gets called when new instance of Timer is created, props passes the properties
@@ -7,6 +8,7 @@ class Timer extends Component {   // constructor is a method that gets called wh
     this.state = {       
       minutesRemaining: 0,   
       secondsRemaining: 0,
+      isInputVisible: true,
       isRunning: false,
       intervalId: null,     // variable used to treack interval timer, which is used for repetitive tasks, such as display timer every second
     };      // setting initial state, time at 0, interval is set at null, because the timer isnt running at start,
@@ -40,7 +42,7 @@ class Timer extends Component {   // constructor is a method that gets called wh
     } else {
       seconds = Math.floor(minutes * 60);
     }
-    this.setState({ minutesRemaining: minutes, secondsRemaining: seconds, isRunning: true });
+    this.setState({ minutesRemaining: minutes, secondsRemaining: seconds, isRunning: true,isInputVisible: false, });
   
     const intervalId = setInterval(() => {
       const { minutesRemaining, secondsRemaining, isRunning } = this.state;
@@ -76,7 +78,7 @@ class Timer extends Component {   // constructor is a method that gets called wh
     if (intervalId) {
       clearInterval(intervalId);
     }
-    this.setState({ minutesRemaining: 0, secondsRemaining: 0, intervalId: null, isRunning: false });
+    this.setState({ minutesRemaining: 0, secondsRemaining: 0, intervalId: null, isRunning: false, isInputVisible: true, });
   }
 
   handleInputChange(event) {
@@ -84,23 +86,28 @@ class Timer extends Component {   // constructor is a method that gets called wh
   }
 
   render() {
-    const { minutesRemaining, inputMinutes, isRunning } = this.state;
+    const { minutesRemaining, inputMinutes, isRunning, isInputVisible } = this.state;
+
     return (
-      <div>
-        <div>{this.updateTimerDisplay()}</div>
-        <input
-          type="number"
-          step="0.01"
-          placeholder="Enter minutes"
-          value={inputMinutes}
-          onChange={(e) => this.handleInputChange(e)}
-        />
-        {isRunning ? ( // Conditional rendering based on whether the timer is running
+      <div className="timer-container">
+        {isInputVisible ? ( // Conditional rendering based on the input visibility
+          <input
+            type="number"
+            step="0.01"
+            placeholder="Enter minutes"
+            value={inputMinutes}
+            onChange={(e) => this.handleInputChange(e)}
+            className='inputtimer'
+          />
+        ) : (
+          <div>{this.updateTimerDisplay()}</div>
+        )}
+        {isRunning ? (
           <button onClick={() => this.pauseTimer()}>Pause</button>
         ) : (
           <button onClick={() => this.startTimer()}>Start</button>
         )}
-        <button onClick={() => this.stopTimer()}>Stop</button>
+        <button onClick={() => this.stopTimer()}>Reset</button>
       </div>
     );
   }

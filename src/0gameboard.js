@@ -1144,7 +1144,7 @@ for (let row = 0; row < 8; row++) {
 
 return (
   <div className="container col-12 col-md-12">
-    <PlayerTurn currentPlayer={currentPlayer} />
+    <PlayerTurn className='player-turn' currentPlayer={currentPlayer} />
     <div className="btn-group mb-3 container col-12 col-md-6">
       <button
         className={`btn btn-primary col-6 rounded chess-button ${easyMode ? 'active' : ''}`}
