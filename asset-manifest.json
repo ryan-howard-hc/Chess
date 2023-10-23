@@ -1,15 +1,19 @@
 {
   "files": {
-    "main.css": "/Chess/static/css/main.a449b04b.css",
-    "main.js": "/Chess/static/js/main.9a24806c.js",
+    "main.css": "/Chess/static/css/main.f5764eae.css",
+    "main.js": "/Chess/static/js/main.e993913f.js",
     "static/js/787.c84b6d57.chunk.js": "/Chess/static/js/787.c84b6d57.chunk.js",
+    "static/media/PaladinFLF.ttf": "/Chess/static/media/PaladinFLF.6879e23c7d6e97d2f9c8.ttf",
+    "static/media/Canterbury.ttf": "/Chess/static/media/Canterbury.d1da583cd325a3a36860.ttf",
+    "static/media/MeathFLF.ttf": "/Chess/static/media/MeathFLF.ccc4ac4a5d7c1d0c4036.ttf",
+    "static/media/chess.jpg": "/Chess/static/media/chess.dcf799d23ab8361c9452.jpg",
     "index.html": "/Chess/index.html",
-    "main.a449b04b.css.map": "/Chess/static/css/main.a449b04b.css.map",
-    "main.9a24806c.js.map": "/Chess/static/js/main.9a24806c.js.map",
+    "main.f5764eae.css.map": "/Chess/static/css/main.f5764eae.css.map",
+    "main.e993913f.js.map": "/Chess/static/js/main.e993913f.js.map",
     "787.c84b6d57.chunk.js.map": "/Chess/static/js/787.c84b6d57.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.a449b04b.css",
-    "static/js/main.9a24806c.js"
+    "static/css/main.f5764eae.css",
+    "static/js/main.e993913f.js"
   ]
 }
