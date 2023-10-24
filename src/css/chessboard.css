@@ -23,7 +23,7 @@
 .title {
   font-family: Canterbury;
   letter-spacing: 2px;
-  font-size: 80px;
+  font-size: 60px;
 }
 
 .timer-container {
@@ -37,7 +37,9 @@
 
 
 h2{
-  font-size: 60px;
+  font-size: 50px;
+  font-weight: bolder;
+  letter-spacing: 5px;
 }
 
 @font-face {
@@ -104,8 +106,13 @@ h2{
 }
 
 .chess-piece {
-  font-size: 3rem; 
+  font-size: 4rem; 
   font-family: Arial, sans-serif; 
+  
+}
+.chess-piece img {
+  width: 3rem; 
+  height: 3rem; 
 }
 
 .player-turn {
@@ -164,6 +171,23 @@ h2{
 }
 
 
+/* .header {
+  display: -moz-flex;
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: flex;
+  -moz-flex-direction: column;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+
+  transition: transform 0.5s ease-in-out;
+}
+
+.header.visible {
+  transform: translateX(0);
+} */
+
 
 @media (max-width: 768px) {
   .chessboard {
@@ -179,6 +203,11 @@ h2{
 
   .chess-piece {
     font-size: 2rem; 
+  }
+
+  .chess-piece img {
+    width:2rem; 
+    height:2rem; 
   }
   .flash-alert {
     position: fixed;

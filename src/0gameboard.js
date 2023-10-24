@@ -7,11 +7,14 @@ import ChessPiece from './01chesspiece';
 import EasyModeToggle from './02easymode';
 import TakenPieces from './03takenpieces';
 import Timer from './08timer';
+import Header from './04header';
+
 const Chessboard = () => {
   // const [gameOver, setGameOver] = useState(false);
   // const [checkmateMessage, setchecksmateMessage] = useState('');
   // const [gameOverAlert, setGameOverAlert] = useState(false);
   const [checkNotification, setCheckNotification] = useState(false);
+
 
 
 const [easyMode, setEasyMode] = useState(false);   //sets initial state for my easy mode component to be turned off
@@ -1144,6 +1147,7 @@ for (let row = 0; row < 8; row++) {
 
 return (
   <div className="container col-12 col-md-12">
+    {/* <Header /> */}
     <PlayerTurn className='player-turn' currentPlayer={currentPlayer} />
     <div className="btn-group mb-3 container col-12 col-md-6">
       <button
