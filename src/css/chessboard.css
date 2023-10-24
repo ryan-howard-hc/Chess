@@ -1,13 +1,20 @@
-.app {
+.App {
   background-image: url(./chess.jpg);
+  background-size: cover; 
+  background-position: center; 
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  height: 100vh;
+
 }
+
 
 .chessboard-container {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 80vh;
-  background-color: antiquewhite;
+  background: inherit !important;
 }
 
 .timebutton {
@@ -23,7 +30,7 @@
 .title {
   font-family: Canterbury;
   letter-spacing: 2px;
-  font-size: 80px;
+  font-size: 60px;
 }
 
 .timer-container {
@@ -37,7 +44,9 @@
 
 
 h2{
-  font-size: 60px;
+  font-size: 50px;
+  font-weight: bolder;
+  letter-spacing: 5px;
 }
 
 @font-face {
@@ -86,8 +95,10 @@ h2{
   grid-template-columns: repeat(8, 70px);
   grid-gap: 2px;
   margin-left: 30px;
+  background: inherit !important;
 
-  background-color:#fcedf1}
+
+}
 
 .square {
   width: 70px;
@@ -104,8 +115,13 @@ h2{
 }
 
 .chess-piece {
-  font-size: 3rem; 
+  font-size: 4rem; 
   font-family: Arial, sans-serif; 
+  
+}
+.chess-piece img {
+  width: 3rem; 
+  height: 3rem; 
 }
 
 .player-turn {
@@ -164,8 +180,35 @@ h2{
 }
 
 
+/* .header {
+  display: -moz-flex;
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: flex;
+  -moz-flex-direction: column;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+
+  transition: transform 0.5s ease-in-out;
+}
+
+.header.visible {
+  transform: translateX(0);
+} */
+
 
 @media (max-width: 768px) {
+
+  .App {
+    background-image: url(./chess.jpg);
+    background-size: cover; 
+    background-position: center; 
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    height: 120vh;
+  
+  }
   .chessboard {
     grid-template-columns: repeat(8, 35px); 
     margin-left: 12px;
@@ -179,6 +222,11 @@ h2{
 
   .chess-piece {
     font-size: 2rem; 
+  }
+
+  .chess-piece img {
+    width:2rem; 
+    height:2rem; 
   }
   .flash-alert {
     position: fixed;
